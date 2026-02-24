@@ -14,31 +14,43 @@ export default function App() {
   const [done, setDone] = useState(false);
 
   const handleEmailSubmit = async (submittedEmail: string) => {
-    await supabase.from('onboarding_signups').upsert(
-      { email: submittedEmail },
-      { onConflict: 'email' }
-    );
+    try {
+      await supabase.from('onboarding_signups').upsert(
+        { email: submittedEmail },
+        { onConflict: 'email' }
+      );
+    } catch {
+      // DB unavailable — continue without persistence
+    }
     setEmail(submittedEmail);
     setStep('role');
   };
 
   const handleRoleSelect = async (selectedRole: Role) => {
-    await supabase
-      .from('onboarding_signups')
-      .update({ role: selectedRole })
-      .eq('email', email);
+    try {
+      await supabase
+        .from('onboarding_signups')
+        .update({ role: selectedRole })
+        .eq('email', email);
+    } catch {
+      // DB unavailable
+    }
     setRole(selectedRole);
     setStep('templates');
   };
 
   const handleFinish = async (templates: string[]) => {
-    await supabase
-      .from('onboarding_signups')
-      .update({
-        selected_templates: templates,
-        completed_at: new Date().toISOString(),
-      })
-      .eq('email', email);
+    try {
+      await supabase
+        .from('onboarding_signups')
+        .update({
+          selected_templates: templates,
+          completed_at: new Date().toISOString(),
+        })
+        .eq('email', email);
+    } catch {
+      // DB unavailable
+    }
     setDone(true);
   };
 
