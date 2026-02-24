@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowRight, Loader2 } from 'lucide-react';
+import { trackFunnelEvent } from '../lib/analytics';
 
 interface EmailSignupProps {
   onSubmit: (email: string) => Promise<void>;
@@ -9,6 +10,10 @@ export default function EmailSignup({ onSubmit }: EmailSignupProps) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    trackFunnelEvent({ event: 'signup_view' });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

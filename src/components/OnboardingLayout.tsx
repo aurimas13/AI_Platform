@@ -22,7 +22,7 @@ export default function OnboardingLayout({ step, children }: OnboardingLayoutPro
         <StepIndicator total={steps.length} current={currentIndex} />
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-6 pb-16">
+      <main className="flex-1 flex items-start justify-center px-6 py-10 sm:py-16 overflow-y-auto">
         <div className="w-full max-w-2xl animate-fade-in">{children}</div>
       </main>
 

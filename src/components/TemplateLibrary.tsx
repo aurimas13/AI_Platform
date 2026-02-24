@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import type { Role, Template } from '../types/onboarding';
 import { templatesByRole, roleOptions } from '../data/templates';
+import { trackFunnelEvent } from '../lib/analytics';
 
 const iconMap: Record<string, React.ElementType> = {
   Search,
@@ -82,9 +83,9 @@ export default function TemplateLibrary({ role, onFinish, onBack }: TemplateLibr
     <div>
       <button
         onClick={onBack}
-        className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-white transition-colors mb-8 group"
+        className="flex items-center gap-2 text-sm text-neutral-300 hover:text-white border border-neutral-700 hover:border-neutral-500 rounded-lg px-4 py-2 transition-colors mb-8 group"
       >
-        <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
         Back
       </button>
 
@@ -109,7 +110,10 @@ export default function TemplateLibrary({ role, onFinish, onBack }: TemplateLibr
           return (
             <button
               key={template.slug}
-              onClick={() => toggle(template.slug)}
+              onClick={() => {
+                toggle(template.slug);
+                trackFunnelEvent({ event: 'template_clicked', template_slug: template.slug });
+              }}
               className={`relative text-left p-6 rounded-xl border transition-all duration-300 ${
                 isSelected
                   ? 'bg-white text-black border-white'

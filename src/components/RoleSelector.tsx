@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import type { Role, RoleOption } from '../types/onboarding';
 import { roleOptions } from '../data/templates';
+import { trackFunnelEvent } from '../lib/analytics';
 
 const iconMap: Record<string, React.ElementType> = {
   Megaphone,
@@ -34,9 +35,9 @@ export default function RoleSelector({ onSelect, onBack }: RoleSelectorProps) {
     <div>
       <button
         onClick={onBack}
-        className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-white transition-colors mb-8 group"
+        className="flex items-center gap-2 text-sm text-neutral-300 hover:text-white border border-neutral-700 hover:border-neutral-500 rounded-lg px-4 py-2 transition-colors mb-8 group"
       >
-        <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
+        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
         Back
       </button>
 
@@ -56,7 +57,10 @@ export default function RoleSelector({ onSelect, onBack }: RoleSelectorProps) {
           return (
             <button
               key={role.id}
-              onClick={() => setSelected(role.id)}
+              onClick={() => {
+                setSelected(role.id);
+                trackFunnelEvent({ event: 'role_selected', role_selected: role.id });
+              }}
               onMouseEnter={() => setHovered(role.id)}
               onMouseLeave={() => setHovered(null)}
               className={`relative text-left p-6 rounded-xl border transition-all duration-300 group ${
