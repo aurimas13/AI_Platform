@@ -1,4 +1,4 @@
-AI_Platform project as a proof of concept for AI Platform to show the role-based guided onboarding and metrics dashboard where:
+This project is a proof of concept for the AI Platform to show the role-based guided onboarding and metrics dashboard where:
 
 - Prototype is found at https://ai-platform-delta.vercel.app.
 - Metrics dashboard is found at https://ai-platform-delta.vercel.app/metrics.
