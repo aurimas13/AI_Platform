@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { supabase, supabaseConfigured } from '../lib/supabase';
-import { Hexagon, Loader2, ArrowRight, Users, MousePointerClick, LayoutGrid, AlertTriangle } from 'lucide-react';
+import { Hexagon, Loader2, ArrowRight, Users, MousePointerClick, LayoutGrid, AlertTriangle, Send } from 'lucide-react';
 
 interface FunnelEvent {
   id: string;
   event: string;
   role_selected: string | null;
   template_slug: string | null;
+  invite_email: string | null;
   created_at: string;
 }
 
@@ -50,14 +51,19 @@ export default function MetricsDashboard() {
   const signupViews = events.filter((e) => e.event === 'signup_view').length;
   const rolesSelected = events.filter((e) => e.event === 'role_selected').length;
   const templatesClicked = events.filter((e) => e.event === 'template_clicked').length;
+  const teamInvitesSent = events.filter((e) => e.event === 'team_invite_sent').length;
 
   const conversionRate =
     signupViews > 0 ? ((templatesClicked / signupViews) * 100).toFixed(1) : '0.0';
+
+  const viralRate =
+    templatesClicked > 0 ? ((teamInvitesSent / templatesClicked) * 100).toFixed(1) : '0.0';
 
   const stages: FunnelStage[] = [
     { label: 'Signup Views', count: signupViews, icon: Users },
     { label: 'Roles Selected', count: rolesSelected, icon: MousePointerClick },
     { label: 'Templates Clicked', count: templatesClicked, icon: LayoutGrid },
+    { label: 'Team Invites Sent', count: teamInvitesSent, icon: Send },
   ];
 
   const roleCounts: Record<string, number> = {};
@@ -131,7 +137,7 @@ export default function MetricsDashboard() {
         {!loading && !error && (
           <>
             {/* Funnel stages */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
               {stages.map((stage, i) => {
                 const Icon = stage.icon;
                 const dropoff =
@@ -161,10 +167,10 @@ export default function MetricsDashboard() {
               })}
             </div>
 
-            {/* Conversion highlight */}
-            <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6 mb-10">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
-                <div className="flex items-center gap-3">
+            {/* Conversion & Viral Rate */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+              <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
                   <span className="text-sm text-neutral-500">Signup Views</span>
                   <ArrowRight className="w-4 h-4 text-neutral-700" />
                   <span className="text-sm text-neutral-500">Templates Clicked</span>
@@ -172,6 +178,18 @@ export default function MetricsDashboard() {
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl font-bold tracking-tight">{conversionRate}%</span>
                   <span className="text-sm text-neutral-500">conversion rate</span>
+                </div>
+              </div>
+
+              <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-sm text-neutral-500">Templates Clicked</span>
+                  <ArrowRight className="w-4 h-4 text-neutral-700" />
+                  <span className="text-sm text-neutral-500">Team Invites Sent</span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold tracking-tight">{viralRate}%</span>
+                  <span className="text-sm text-neutral-500">viral rate</span>
                 </div>
               </div>
             </div>
