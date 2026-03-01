@@ -77,7 +77,7 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
               ? 'Your teammate will receive an invitation shortly.'
               : (
                 <>
-                  Your workspace is ready. We'll send a confirmation to{' '}
+                  Your workspace is being configured. We'll send a confirmation to{' '}
                   <span className="text-white">{email}</span>.
                 </>
               )}
