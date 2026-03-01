@@ -5,6 +5,7 @@ import OnboardingLayout from './components/OnboardingLayout';
 import EmailSignup from './components/EmailSignup';
 import RoleSelector from './components/RoleSelector';
 import TemplateLibrary from './components/TemplateLibrary';
+import SuccessModal from './components/SuccessModal';
 import { Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -12,6 +13,7 @@ export default function App() {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<Role | null>(null);
   const [done, setDone] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const handleEmailSubmit = async (submittedEmail: string) => {
     try {
@@ -52,14 +54,19 @@ export default function App() {
       // DB unavailable
     }
     setDone(true);
+    setShowModal(true);
   };
 
-  if (done) {
+  const handleSkip = () => {
+    setDone(true);
+  };
+
+  if (done && !showModal) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
         <div className="text-center animate-fade-in">
-          <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6">
-            <Sparkles className="w-8 h-8 text-white" strokeWidth={1.5} />
+          <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-6">
+            <Sparkles className="w-8 h-8 text-emerald-400" strokeWidth={1.5} />
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
             You're all set
@@ -78,21 +85,31 @@ export default function App() {
   }
 
   return (
-    <OnboardingLayout step={step}>
-      {step === 'email' && <EmailSignup onSubmit={handleEmailSubmit} />}
-      {step === 'role' && (
-        <RoleSelector
-          onSelect={handleRoleSelect}
-          onBack={() => setStep('email')}
+    <>
+      <OnboardingLayout step={step}>
+        {step === 'email' && <EmailSignup onSubmit={handleEmailSubmit} />}
+        {step === 'role' && (
+          <RoleSelector
+            onSelect={handleRoleSelect}
+            onBack={() => setStep('email')}
+          />
+        )}
+        {step === 'templates' && role && (
+          <TemplateLibrary
+            role={role}
+            onFinish={handleFinish}
+            onSkip={handleSkip}
+            onBack={() => setStep('role')}
+          />
+        )}
+      </OnboardingLayout>
+
+      {showModal && (
+        <SuccessModal
+          email={email}
+          onClose={() => setShowModal(false)}
         />
       )}
-      {step === 'templates' && role && (
-        <TemplateLibrary
-          role={role}
-          onFinish={handleFinish}
-          onBack={() => setStep('role')}
-        />
-      )}
-    </OnboardingLayout>
+    </>
   );
 }

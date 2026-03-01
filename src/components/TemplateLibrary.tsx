@@ -48,10 +48,11 @@ const iconMap: Record<string, React.ElementType> = {
 interface TemplateLibraryProps {
   role: Role;
   onFinish: (templates: string[]) => Promise<void>;
+  onSkip: () => void;
   onBack: () => void;
 }
 
-export default function TemplateLibrary({ role, onFinish, onBack }: TemplateLibraryProps) {
+export default function TemplateLibrary({ role, onFinish, onSkip, onBack }: TemplateLibraryProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
 
@@ -178,7 +179,7 @@ export default function TemplateLibrary({ role, onFinish, onBack }: TemplateLibr
         </button>
 
         <button
-          onClick={() => handleFinish()}
+          onClick={onSkip}
           disabled={loading}
           className="text-sm text-neutral-500 hover:text-white transition-colors h-12 px-4"
         >
