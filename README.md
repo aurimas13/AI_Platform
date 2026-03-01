@@ -4,3 +4,5 @@ This project is a proof of concept for the AI Platform to show the role-based gu
 - Metrics dashboard is found at https://ai-platform-delta.vercel.app/metrics.
 
 Brief description of the project can be found [here](https://github.com/aurimas13/AI_Platform/blob/main/nexos_ab_test_brief.docx.pdf).
+
+Updated Product Growth Memo is found [here](https://github.com/aurimas13/AI_Platform/blob/main/Product%20Growth%20Memo.pdf).
