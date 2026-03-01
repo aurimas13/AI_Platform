@@ -73,12 +73,14 @@ export default function App() {
             You're all set
           </h1>
           <p className="text-neutral-400 text-lg max-w-sm mx-auto mb-8">
-            {invitedEmail ? (
-              <>Invite sent to <span className="text-white">{invitedEmail}</span>. We'll also send a confirmation to <span className="text-white">{email}</span>.</>
-            ) : (
-              <>Your workspace is being configured. We'll send a confirmation to{' '}<span className="text-white">{email}</span>.</>
-            )}
+            Your workspace is being configured. We'll send a confirmation to{' '}
+            <span className="text-white">{email}</span>.
           </p>
+          {invitedEmail && (
+            <p className="text-neutral-400 text-sm max-w-sm mx-auto mb-8">
+              Invite sent to <span className="text-white">{invitedEmail}</span>.
+            </p>
+          )}
           <div className="flex items-center justify-center gap-2 text-sm text-neutral-600">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Provisioning agents...
