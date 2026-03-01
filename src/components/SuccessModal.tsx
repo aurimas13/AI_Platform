@@ -4,7 +4,7 @@ import { trackFunnelEvent } from '../lib/analytics';
 
 interface SuccessModalProps {
   email: string;
-  onClose: () => void;
+  onClose: (invitedEmail?: string) => void;
 }
 
 export default function SuccessModal({ email, onClose }: SuccessModalProps) {
@@ -37,7 +37,7 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
     setSent(true);
 
     setTimeout(() => {
-      onClose();
+      onClose(inviteEmail.trim().toLowerCase());
     }, 1500);
   };
 
@@ -46,14 +46,14 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fade-in"
-        onClick={onClose}
+        onClick={() => onClose()}
       />
 
       {/* Modal */}
       <div className="relative w-full max-w-md bg-neutral-950 border border-neutral-800 rounded-2xl p-8 animate-fade-in">
         {/* Close button */}
         <button
-          onClick={onClose}
+          onClick={() => onClose()}
           className="absolute top-4 right-4 text-neutral-600 hover:text-white transition-colors"
         >
           <X className="w-5 h-5" />
@@ -135,7 +135,7 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
             </form>
 
             <button
-              onClick={onClose}
+              onClick={() => onClose()}
               className="w-full mt-4 text-xs text-neutral-600 hover:text-neutral-400 transition-colors py-2"
             >
               Skip — I'll invite later

@@ -14,6 +14,7 @@ export default function App() {
   const [role, setRole] = useState<Role | null>(null);
   const [done, setDone] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [invitedEmail, setInvitedEmail] = useState('');
 
   const handleEmailSubmit = async (submittedEmail: string) => {
     try {
@@ -72,8 +73,11 @@ export default function App() {
             You're all set
           </h1>
           <p className="text-neutral-400 text-lg max-w-sm mx-auto mb-8">
-            Your workspace is being configured. We'll send a confirmation to{' '}
-            <span className="text-white">{email}</span>.
+            {invitedEmail ? (
+              <>Invite sent to <span className="text-white">{invitedEmail}</span>. We'll also send a confirmation to <span className="text-white">{email}</span>.</>
+            ) : (
+              <>Your workspace is being configured. We'll send a confirmation to{' '}<span className="text-white">{email}</span>.</>
+            )}
           </p>
           <div className="flex items-center justify-center gap-2 text-sm text-neutral-600">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -107,7 +111,10 @@ export default function App() {
       {showModal && (
         <SuccessModal
           email={email}
-          onClose={() => setShowModal(false)}
+          onClose={(invited) => {
+            if (invited) setInvitedEmail(invited);
+            setShowModal(false);
+          }}
         />
       )}
     </>
