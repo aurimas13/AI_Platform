@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 
-type FunnelEvent = 'signup_view' | 'role_selected' | 'template_clicked' | 'team_invite_sent';
+type FunnelEvent = 'signup_view' | 'role_selected' | 'template_clicked' | 'team_invite_sent' | 'paywall_viewed' | 'upgrade_intent_clicked';
 
 interface FunnelPayload {
   event: FunnelEvent;

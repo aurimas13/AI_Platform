@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PaywallModal from './PaywallModal';
 import {
   Search,
   PenTool,
@@ -52,9 +53,17 @@ interface TemplateLibraryProps {
   onBack: () => void;
 }
 
+const PRO_TEMPLATES = new Set([
+  'audience-insights',
+  'docs-generator',
+  'regulatory-monitor',
+  'sentiment-analyzer',
+]);
+
 export default function TemplateLibrary({ role, onFinish, onSkip, onBack }: TemplateLibraryProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
+  const [paywallSlug, setPaywallSlug] = useState<string | null>(null);
 
   const templates = templatesByRole[role];
   const roleLabel = roleOptions.find((r) => r.id === role)?.label ?? role;
@@ -112,6 +121,10 @@ export default function TemplateLibrary({ role, onFinish, onSkip, onBack }: Temp
             <button
               key={template.slug}
               onClick={() => {
+                if (PRO_TEMPLATES.has(template.slug)) {
+                  setPaywallSlug(template.slug);
+                  return;
+                }
                 toggle(template.slug);
                 trackFunnelEvent({ event: 'template_clicked', template_slug: template.slug });
               }}
@@ -135,15 +148,21 @@ export default function TemplateLibrary({ role, onFinish, onSkip, onBack }: Temp
                   />
                 </div>
 
-                <div
-                  className={`w-5 h-5 rounded-md border-2 transition-all duration-300 flex items-center justify-center ${
-                    isSelected
-                      ? 'border-black bg-black'
-                      : 'border-neutral-700'
-                  }`}
-                >
-                  {isSelected && <Check className="w-3 h-3 text-white" />}
-                </div>
+                {PRO_TEMPLATES.has(template.slug) ? (
+                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-md">
+                    PRO
+                  </span>
+                ) : (
+                  <div
+                    className={`w-5 h-5 rounded-md border-2 transition-all duration-300 flex items-center justify-center ${
+                      isSelected
+                        ? 'border-black bg-black'
+                        : 'border-neutral-700'
+                    }`}
+                  >
+                    {isSelected && <Check className="w-3 h-3 text-white" />}
+                  </div>
+                )}
               </div>
 
               <h3 className="text-base font-semibold mb-1.5">{template.name}</h3>
@@ -186,6 +205,12 @@ export default function TemplateLibrary({ role, onFinish, onSkip, onBack }: Temp
           Skip for now
         </button>
       </div>
+      {paywallSlug && (
+        <PaywallModal
+          templateSlug={paywallSlug}
+          onClose={() => setPaywallSlug(null)}
+        />
+      )}
     </div>
   );
 }
