@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import type { OnboardingStep, Role } from './types/onboarding';
+import type { ABVariant } from './components/EmailSignup';
 import { supabase } from './lib/supabase';
 import OnboardingLayout from './components/OnboardingLayout';
 import EmailSignup from './components/EmailSignup';
 import RoleSelector from './components/RoleSelector';
 import TemplateLibrary from './components/TemplateLibrary';
 import SuccessModal from './components/SuccessModal';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, MessageSquare } from 'lucide-react';
 
 export default function App() {
   const [step, setStep] = useState<OnboardingStep>('email');
@@ -15,8 +16,10 @@ export default function App() {
   const [done, setDone] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [invitedEmail, setInvitedEmail] = useState('');
+  const [variant, setVariant] = useState<ABVariant>('B');
+  const [showBlankChat, setShowBlankChat] = useState(false);
 
-  const handleEmailSubmit = async (submittedEmail: string) => {
+  const handleEmailSubmit = async (submittedEmail: string, v: ABVariant) => {
     try {
       await supabase.from('onboarding_signups').upsert(
         { email: submittedEmail },
@@ -26,7 +29,12 @@ export default function App() {
       // DB unavailable — continue without persistence
     }
     setEmail(submittedEmail);
-    setStep('role');
+
+    if (v === 'A') {
+      setShowBlankChat(true);
+    } else {
+      setStep('role');
+    }
   };
 
   const handleRoleSelect = async (selectedRole: Role) => {
@@ -62,6 +70,27 @@ export default function App() {
     setDone(true);
   };
 
+  if (showBlankChat) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+        <div className="text-center animate-fade-in">
+          <div className="w-16 h-16 rounded-2xl bg-neutral-800 border border-neutral-700 flex items-center justify-center mx-auto mb-6">
+            <MessageSquare className="w-8 h-8 text-neutral-400" strokeWidth={1.5} />
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
+            Blank Chat Interface
+          </h1>
+          <p className="text-neutral-500 text-lg max-w-sm mx-auto mb-6">
+            Variant A (Control) — no guided onboarding.
+          </p>
+          <div className="w-full max-w-md mx-auto h-64 bg-neutral-900/50 border border-neutral-800 rounded-xl flex items-center justify-center">
+            <p className="text-neutral-600 text-sm">Chat interface placeholder</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (done && !showModal) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
@@ -93,7 +122,13 @@ export default function App() {
   return (
     <>
       <OnboardingLayout step={step}>
-        {step === 'email' && <EmailSignup onSubmit={handleEmailSubmit} />}
+        {step === 'email' && (
+          <EmailSignup
+            onSubmit={handleEmailSubmit}
+            variant={variant}
+            onVariantChange={setVariant}
+          />
+        )}
         {step === 'role' && (
           <RoleSelector
             onSelect={handleRoleSelect}

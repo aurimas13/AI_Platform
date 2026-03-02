@@ -2,18 +2,22 @@ import { useState, useEffect } from 'react';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { trackFunnelEvent } from '../lib/analytics';
 
+export type ABVariant = 'A' | 'B';
+
 interface EmailSignupProps {
-  onSubmit: (email: string) => Promise<void>;
+  onSubmit: (email: string, variant: ABVariant) => Promise<void>;
+  variant: ABVariant;
+  onVariantChange: (v: ABVariant) => void;
 }
 
-export default function EmailSignup({ onSubmit }: EmailSignupProps) {
+export default function EmailSignup({ onSubmit, variant, onVariantChange }: EmailSignupProps) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    trackFunnelEvent({ event: 'signup_view' });
-  }, []);
+    trackFunnelEvent({ event: 'signup_view', ab_variant: variant });
+  }, [variant]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +36,7 @@ export default function EmailSignup({ onSubmit }: EmailSignupProps) {
 
     setLoading(true);
     try {
-      await onSubmit(email.trim().toLowerCase());
+      await onSubmit(email.trim().toLowerCase(), variant);
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {
@@ -90,6 +94,27 @@ export default function EmailSignup({ onSubmit }: EmailSignupProps) {
       <p className="mt-8 text-xs text-neutral-600 max-w-sm mx-auto">
         By continuing, you agree to our Terms of Service and Privacy Policy.
       </p>
+
+      {/* A/B Test Toggle */}
+      <div className="mt-10 flex items-center justify-center gap-3">
+        <span className="text-[10px] uppercase tracking-widest text-neutral-700">
+          Simulate A/B Test Variant
+        </span>
+        <button
+          type="button"
+          onClick={() => onVariantChange(variant === 'B' ? 'A' : 'B')}
+          className="relative w-10 h-5 rounded-full transition-colors duration-200 focus:outline-none"
+          style={{ backgroundColor: variant === 'B' ? '#059669' : '#525252' }}
+        >
+          <span
+            className="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200"
+            style={{ transform: variant === 'B' ? 'translateX(20px)' : 'translateX(0)' }}
+          />
+        </button>
+        <span className="text-[10px] text-neutral-500 w-28 text-left">
+          {variant === 'A' ? 'Variant A (Control)' : 'Variant B (Guided)'}
+        </span>
+      </div>
     </div>
   );
 }

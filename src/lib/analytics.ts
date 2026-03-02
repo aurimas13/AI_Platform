@@ -7,6 +7,7 @@ interface FunnelPayload {
   role_selected?: string;
   template_slug?: string;
   invite_email?: string;
+  ab_variant?: 'A' | 'B';
 }
 
 export async function trackFunnelEvent(payload: FunnelPayload): Promise<void> {
@@ -16,6 +17,7 @@ export async function trackFunnelEvent(payload: FunnelPayload): Promise<void> {
       role_selected: payload.role_selected ?? null,
       template_slug: payload.template_slug ?? null,
       invite_email: payload.invite_email ?? null,
+      ab_variant: payload.ab_variant ?? null,
       created_at: new Date().toISOString(),
     });
   } catch {
