@@ -44,7 +44,7 @@ export default function PaywallModal({ templateSlug, onClose }: PaywallModalProp
           <h2 className="text-2xl font-bold tracking-tight mb-2">
             Unlock Enterprise Agents
             <br />
-            <span className="text-amber-400">with Nexos Pro</span>
+            <span className="text-amber-400">with AI Gateway Pro</span>
           </h2>
           <p className="text-neutral-400 text-sm max-w-xs mx-auto">
             This agent requires a Pro subscription. Upgrade to access premium AI agents and advanced features.

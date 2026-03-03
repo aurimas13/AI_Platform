@@ -42,7 +42,7 @@ export default function RoleSelector({ onSelect, onBack }: RoleSelectorProps) {
       </button>
 
       <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-        How will you use Nexos?
+        How will you use AI Gateway?
       </h2>
       <p className="text-neutral-400 text-lg mb-10">
         Select your primary role. We'll personalize your agent library.

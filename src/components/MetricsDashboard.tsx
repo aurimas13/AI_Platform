@@ -87,7 +87,7 @@ export default function MetricsDashboard() {
       <header className="flex items-center justify-between px-6 py-5 sm:px-10 border-b border-neutral-800">
         <div className="flex items-center gap-2.5">
           <Hexagon className="w-7 h-7 text-white" strokeWidth={1.5} />
-          <span className="text-lg font-semibold tracking-tight">nexos.ai</span>
+          <span className="text-lg font-semibold tracking-tight">AI Gateway</span>
           <span className="ml-2 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-neutral-500 border border-neutral-800 rounded-full">
             Metrics
           </span>
