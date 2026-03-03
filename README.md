@@ -2,7 +2,7 @@
 
 > A **Product-Led Growth** prototype that solves the **Cold Start Problem** in AI platforms — replacing a blank chat interface with a role-based guided setup that drives activation, retention, and viral expansion.
 
-**[Live Prototype](https://ai-platform-delta.vercel.app)** &nbsp;|&nbsp; **[Metrics Dashboard](https://ai-platform-delta.vercel.app/metrics)** &nbsp;|&nbsp; **[Product Brief](https://github.com/aurimas13/AI_Platform/blob/main/nexos_ab_test_brief.docx.pdf)** &nbsp;|&nbsp; **[Growth Memo](https://github.com/aurimas13/AI_Platform/blob/main/Product%20Growth%20Memo.pdf)**
+**[Live Prototype](https://ai-gateway-poc.vercel.app)** &nbsp;|&nbsp; **[Metrics Dashboard](https://ai-gateway-poc.vercel.app/metrics)** &nbsp;|&nbsp; **[Product Brief](https://github.com/aurimas13/AI_Platform/blob/main/AI%20Gateway.pdf)** &nbsp;|&nbsp; **[Growth Memo](https://github.com/aurimas13/AI_Platform/blob/main/Product%20Growth%20Memo.pdf)**
 
 ---
 
@@ -52,6 +52,7 @@ This project is a fully functional **proof-of-concept** demonstrating three core
 | **Frontend** | React + TypeScript + Vite |
 | **Styling** | Tailwind CSS |
 | **Icons** | Lucide React |
+| **AI / LLM** | OpenAI GPT API |
 | **Backend / Analytics** | Supabase (PostgreSQL + REST API) |
 | **Hosting** | Vercel (auto-deploys on push to `main`) |
 | **Routing** | React Router DOM |
