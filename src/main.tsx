@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App.tsx';
 import MetricsDashboard from './components/MetricsDashboard.tsx';
+import CaseStudy from './components/CaseStudy.tsx';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
@@ -10,6 +11,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/case-study" element={<CaseStudy />} />
         <Route path="/metrics" element={<MetricsDashboard />} />
       </Routes>
     </BrowserRouter>

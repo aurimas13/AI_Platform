@@ -46,6 +46,15 @@ export default function EmailSignup({ onSubmit, variant, onVariantChange }: Emai
 
   return (
     <div className="text-center">
+      {/* Portfolio context banner */}
+      <div className="mb-8 mx-auto max-w-md bg-neutral-900/60 border border-neutral-800 rounded-xl px-4 py-3">
+        <p className="text-[11px] text-neutral-400 leading-relaxed">
+          <span className="text-emerald-400 font-semibold">PLG Case Study:</span>{' '}
+          This is a live prototype solving the cold-start problem in AI platforms via role-based guided onboarding.{' '}
+          <a href="/case-study" className="text-white underline underline-offset-2 hover:text-emerald-400 transition-colors">Read the case study &rarr;</a>
+        </p>
+      </div>
+
       <div className="mb-3">
         <span className="inline-block px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-neutral-400 border border-neutral-800 rounded-full">
           Get Started

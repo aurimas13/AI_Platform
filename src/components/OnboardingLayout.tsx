@@ -1,4 +1,4 @@
-import { Hexagon } from 'lucide-react';
+import { Hexagon, ArrowLeft } from 'lucide-react';
 import type { OnboardingStep } from '../types/onboarding';
 import StepIndicator from './StepIndicator';
 
@@ -15,9 +15,19 @@ export default function OnboardingLayout({ step, children }: OnboardingLayoutPro
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <header className="flex items-center justify-between px-6 py-5 sm:px-10">
-        <div className="flex items-center gap-2.5">
-          <Hexagon className="w-7 h-7 text-white" strokeWidth={1.5} />
-          <span className="text-lg font-semibold tracking-tight">AI Gateway</span>
+        <div className="flex items-center gap-4">
+          <a
+            href="https://aurimas.io"
+            className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            aurimas.io
+          </a>
+          <div className="w-px h-4 bg-neutral-800" />
+          <div className="flex items-center gap-2.5">
+            <Hexagon className="w-7 h-7 text-white" strokeWidth={1.5} />
+            <span className="text-lg font-semibold tracking-tight">AI Gateway</span>
+          </div>
         </div>
         <StepIndicator total={steps.length} current={currentIndex} />
       </header>
@@ -28,7 +38,8 @@ export default function OnboardingLayout({ step, children }: OnboardingLayoutPro
 
       <footer className="px-6 py-5 sm:px-10 text-center">
         <p className="text-xs text-neutral-500">
-          &copy; 2026 AI Gateway &middot; PLG Onboarding PoC
+          &copy; 2026 AI Gateway &middot; PLG Onboarding PoC &middot;{' '}
+          <a href="/case-study" className="text-neutral-400 hover:text-white transition-colors">Case Study</a>
         </p>
       </footer>
     </div>

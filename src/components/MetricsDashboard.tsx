@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase, supabaseConfigured } from '../lib/supabase';
-import { Hexagon, Loader2, ArrowRight, Users, MousePointerClick, LayoutGrid, AlertTriangle, Send } from 'lucide-react';
+import { Hexagon, Loader2, ArrowRight, ArrowLeft, Users, MousePointerClick, LayoutGrid, AlertTriangle, Send } from 'lucide-react';
 
 interface FunnelEvent {
   id: string;
@@ -85,12 +85,22 @@ export default function MetricsDashboard() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       <header className="flex items-center justify-between px-6 py-5 sm:px-10 border-b border-neutral-800">
-        <div className="flex items-center gap-2.5">
-          <Hexagon className="w-7 h-7 text-white" strokeWidth={1.5} />
-          <span className="text-lg font-semibold tracking-tight">AI Gateway</span>
-          <span className="ml-2 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-neutral-500 border border-neutral-800 rounded-full">
-            Metrics
-          </span>
+        <div className="flex items-center gap-4">
+          <a
+            href="https://aurimas.io"
+            className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            aurimas.io
+          </a>
+          <div className="w-px h-4 bg-neutral-800" />
+          <div className="flex items-center gap-2.5">
+            <Hexagon className="w-7 h-7 text-white" strokeWidth={1.5} />
+            <span className="text-lg font-semibold tracking-tight">AI Gateway</span>
+            <span className="ml-2 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-neutral-500 border border-neutral-800 rounded-full">
+              Metrics
+            </span>
+          </div>
         </div>
       </header>
 
