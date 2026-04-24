@@ -45,40 +45,41 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-stone-900/50 backdrop-blur-sm animate-fade-in"
         onClick={() => onClose()}
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-neutral-950 border border-neutral-800 rounded-2xl p-8 animate-fade-in">
+      <div className="relative w-full max-w-md bg-white border border-stone-200 shadow-card-lg rounded-2xl p-6 sm:p-8 animate-fade-in">
         {/* Close button */}
         <button
           onClick={() => onClose()}
-          className="absolute top-4 right-4 text-neutral-600 hover:text-white transition-colors"
+          aria-label="Close"
+          className="absolute top-4 right-4 text-stone-400 hover:text-stone-900 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Success header */}
-        <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-5">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-5">
             {sent ? (
-              <Check className="w-7 h-7 text-emerald-400" strokeWidth={1.5} />
+              <Check className="w-7 h-7 text-emerald-600" strokeWidth={1.75} />
             ) : (
-              <Sparkles className="w-7 h-7 text-emerald-400" strokeWidth={1.5} />
+              <Sparkles className="w-7 h-7 text-emerald-600" strokeWidth={1.75} />
             )}
           </div>
 
-          <h2 className="text-2xl font-bold tracking-tight mb-2">
-            {sent ? 'Invite Sent!' : 'You\'re all set'}
+          <h2 className="text-2xl font-bold tracking-tight mb-2 text-stone-900">
+            {sent ? 'Invite sent' : 'You\u2019re all set'}
           </h2>
-          <p className="text-neutral-400 text-sm max-w-xs mx-auto">
+          <p className="text-stone-600 text-sm max-w-xs mx-auto">
             {sent
               ? 'Your teammate will receive an invitation shortly.'
               : (
                 <>
-                  Your workspace is being configured. We'll send a confirmation to{' '}
-                  <span className="text-white">{email}</span>.
+                  Your workspace is being configured. We&apos;ll send a confirmation to{' '}
+                  <span className="text-stone-900 font-medium">{email}</span>.
                 </>
               )}
           </p>
@@ -86,21 +87,21 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
 
         {/* Provisioning indicator */}
         {!sent && (
-          <div className="flex items-center justify-center gap-2 text-xs text-neutral-600 mb-8">
+          <div className="flex items-center justify-center gap-2 text-xs text-stone-500 mb-6 sm:mb-8">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Provisioning agents...
+            Provisioning your agents&hellip;
           </div>
         )}
 
         {/* Invite section */}
         {!sent && (
-          <div className="border-t border-neutral-800 pt-6">
-            <div className="flex items-center gap-2 mb-4">
-              <UserPlus className="w-4 h-4 text-neutral-500" strokeWidth={1.5} />
-              <h3 className="text-sm font-medium text-neutral-300">Invite your team</h3>
+          <div className="border-t border-stone-200 pt-6">
+            <div className="flex items-center gap-2 mb-3">
+              <UserPlus className="w-4 h-4 text-brass-600" strokeWidth={1.75} />
+              <h3 className="text-sm font-semibold text-stone-900">Invite your team</h3>
             </div>
-            <p className="text-xs text-neutral-600 mb-4">
-              AI agents work better with your whole team. Send an invite to get started together.
+            <p className="text-xs text-stone-600 mb-4 leading-relaxed">
+              AI agents work better when your whole team is on board. Send an invite to get started together.
             </p>
 
             <form onSubmit={handleSendInvite}>
@@ -113,13 +114,14 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
                     if (error) setError('');
                   }}
                   placeholder="teammate@company.com"
-                  className="w-full h-12 bg-neutral-900 border border-neutral-800 rounded-xl px-4 pr-12 text-white placeholder-neutral-600 text-sm outline-none transition-all duration-200 focus:border-neutral-600 focus:ring-1 focus:ring-neutral-600"
+                  className="w-full h-12 bg-cream-50 border border-stone-200 rounded-xl px-4 pr-12 text-stone-900 placeholder-stone-400 text-sm outline-none transition-all duration-200 focus:border-brass-400 focus:ring-2 focus:ring-brass-200 focus:bg-white"
                   disabled={sending}
                 />
                 <button
                   type="submit"
                   disabled={sending}
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 bg-white text-black rounded-lg flex items-center justify-center transition-all duration-200 hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Send invite"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 bg-stone-900 text-cream-50 rounded-lg flex items-center justify-center transition-all duration-200 hover:bg-stone-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {sending ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -130,15 +132,15 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
               </div>
 
               {error && (
-                <p className="mt-2 text-xs text-red-400 animate-fade-in">{error}</p>
+                <p className="mt-2 text-xs text-red-600 animate-fade-in">{error}</p>
               )}
             </form>
 
             <button
               onClick={() => onClose()}
-              className="w-full mt-4 text-xs text-neutral-600 hover:text-neutral-400 transition-colors py-2"
+              className="w-full mt-4 text-xs text-stone-500 hover:text-stone-900 transition-colors py-2"
             >
-              Skip — I'll invite later
+              Skip &mdash; I&apos;ll invite later
             </button>
           </div>
         )}

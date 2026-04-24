@@ -21,42 +21,43 @@ export default function PaywallModal({ templateSlug, onClose }: PaywallModalProp
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-stone-900/50 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-neutral-950 border border-neutral-800 rounded-2xl p-8 animate-fade-in">
+      <div className="relative w-full max-w-md bg-white border border-stone-200 shadow-card-lg rounded-2xl p-6 sm:p-8 animate-fade-in">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-neutral-600 hover:text-white transition-colors"
+          aria-label="Close"
+          className="absolute top-4 right-4 text-stone-400 hover:text-stone-900 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-5">
-            <Crown className="w-7 h-7 text-amber-400" strokeWidth={1.5} />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-14 h-14 rounded-2xl bg-brass-100 border border-brass-200 flex items-center justify-center mx-auto mb-5">
+            <Crown className="w-7 h-7 text-brass-600" strokeWidth={1.75} />
           </div>
 
-          <h2 className="text-2xl font-bold tracking-tight mb-2">
-            Unlock Enterprise Agents
+          <h2 className="text-2xl font-bold tracking-tight mb-2 text-stone-900">
+            Unlock enterprise agents
             <br />
-            <span className="text-amber-400">with AI Gateway Pro</span>
+            <span className="text-brass-600">with AI Gateway Pro</span>
           </h2>
-          <p className="text-neutral-400 text-sm max-w-xs mx-auto">
-            This agent requires a Pro subscription. Upgrade to access premium AI agents and advanced features.
+          <p className="text-stone-600 text-sm max-w-xs mx-auto">
+            This agent is part of our Pro plan. Upgrade to access premium agents and advanced features.
           </p>
         </div>
 
         {/* Features */}
-        <div className="space-y-3 mb-8">
-          {['Unlimited premium agents', 'Priority processing', 'Advanced analytics'].map((feature) => (
+        <div className="space-y-2.5 mb-6 sm:mb-8 bg-cream-100 rounded-xl p-4 border border-stone-200">
+          {['Unlimited premium agents', 'Priority processing', 'Advanced analytics & SSO'].map((feature) => (
             <div key={feature} className="flex items-center gap-3">
-              <Zap className="w-4 h-4 text-amber-400 flex-shrink-0" strokeWidth={1.5} />
-              <span className="text-sm text-neutral-300">{feature}</span>
+              <Zap className="w-4 h-4 text-brass-600 flex-shrink-0" strokeWidth={1.75} />
+              <span className="text-sm text-stone-700 font-medium">{feature}</span>
             </div>
           ))}
         </div>
@@ -64,14 +65,14 @@ export default function PaywallModal({ templateSlug, onClose }: PaywallModalProp
         {/* Upgrade button */}
         <button
           onClick={handleUpgrade}
-          className="w-full h-12 bg-amber-500 hover:bg-amber-400 text-black font-semibold rounded-xl transition-colors duration-200"
+          className="w-full h-12 bg-brass-600 hover:bg-brass-700 text-cream-50 font-semibold rounded-xl transition-colors duration-200 shadow-card hover:shadow-card-hover"
         >
-          Upgrade Now
+          Upgrade now
         </button>
 
         <button
           onClick={onClose}
-          className="w-full mt-3 text-xs text-neutral-600 hover:text-neutral-400 transition-colors py-2"
+          className="w-full mt-3 text-xs text-stone-500 hover:text-stone-900 transition-colors py-2"
         >
           Maybe later
         </button>

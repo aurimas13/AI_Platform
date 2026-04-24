@@ -1,6 +1,8 @@
 # AI Gateway: PLG Onboarding PoC
 
-> A **Product-Led Growth** prototype that solves the **Cold Start Problem** in AI platforms — replacing a blank chat interface with a role-based guided setup that drives activation, retention, and viral expansion.
+![AI Gateway — Solving the Cold-Start Problem in AI Platforms](./public/og-image.png)
+
+> A **Product-Led Growth** prototype that solves the **Cold-Start Problem** in AI platforms — replacing the blank chat interface with a role-based guided setup that drives activation, retention, and viral expansion.
 
 **[Live Prototype](https://gateway.aurimas.io)** &nbsp;|&nbsp; **[Case Study](https://gateway.aurimas.io/case-study)** &nbsp;|&nbsp; **[Metrics Dashboard](https://gateway.aurimas.io/metrics)** &nbsp;|&nbsp; **[Product Brief](https://github.com/aurimas13/AI_Platform/blob/main/AI%20Gateway.pdf)** &nbsp;|&nbsp; **[Growth Memo](https://github.com/aurimas13/AI_Platform/blob/main/Product%20Growth%20Memo.pdf)**
 

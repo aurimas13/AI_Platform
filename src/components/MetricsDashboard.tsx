@@ -83,63 +83,65 @@ export default function MetricsDashboard() {
     });
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
-      <header className="flex items-center justify-between px-6 py-5 sm:px-10 border-b border-neutral-800">
-        <div className="flex items-center gap-4">
+    <div className="min-h-screen bg-cream-100 text-stone-900 flex flex-col">
+      <header className="flex items-center justify-between px-4 sm:px-10 py-4 sm:py-5 border-b border-stone-200/60 bg-cream-100/80 backdrop-blur-sm sticky top-0 z-40">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           <a
             href="https://aurimas.io"
-            className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-xs sm:text-sm text-stone-500 hover:text-stone-900 transition-colors whitespace-nowrap"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            aurimas.io
+            <span className="hidden sm:inline">aurimas.io</span>
+            <span className="sm:hidden">Back</span>
           </a>
-          <div className="w-px h-4 bg-neutral-800" />
-          <div className="flex items-center gap-2.5">
-            <Hexagon className="w-7 h-7 text-white" strokeWidth={1.5} />
-            <span className="text-lg font-semibold tracking-tight">AI Gateway</span>
-            <span className="ml-2 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-neutral-500 border border-neutral-800 rounded-full">
+          <div className="w-px h-4 bg-stone-300" />
+          <div className="flex items-center gap-2 min-w-0">
+            <Hexagon className="w-6 h-6 sm:w-7 sm:h-7 text-brass-600 flex-shrink-0" strokeWidth={1.75} />
+            <span className="text-base sm:text-lg font-semibold tracking-tight truncate">AI Gateway</span>
+            <span className="hidden sm:inline-block ml-1 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-brass-600 bg-brass-50 border border-brass-200 rounded-full">
               Metrics
             </span>
           </div>
         </div>
+        <a
+          href="/case-study"
+          className="text-xs sm:text-sm text-stone-600 hover:text-stone-900 font-medium transition-colors"
+        >
+          Case study &rarr;
+        </a>
       </header>
 
-      <main className="flex-1 px-6 py-10 sm:px-10 sm:py-16 max-w-5xl mx-auto w-full">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2">
-          Funnel Metrics
+      <main className="flex-1 px-4 sm:px-10 py-8 sm:py-16 max-w-5xl mx-auto w-full">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-2 text-stone-900">
+          Funnel metrics
         </h1>
-        <p className="text-neutral-500 mb-10">
-          Real-time onboarding funnel from Supabase.
+        <p className="text-stone-600 text-base sm:text-lg mb-8 sm:mb-10 max-w-2xl">
+          Live acquisition funnel tracked in Supabase. Every interaction &mdash; from signup view to upgrade intent &mdash; is instrumented.
         </p>
 
         {loading && (
-          <div className="flex items-center gap-3 text-neutral-400 py-20 justify-center">
+          <div className="flex items-center gap-3 text-stone-500 py-20 justify-center">
             <Loader2 className="w-5 h-5 animate-spin" />
-            Loading events...
+            Loading events&hellip;
           </div>
         )}
 
         {error === 'not_configured' && (
-          <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl px-6 py-8 mb-8 text-center">
-            <AlertTriangle className="w-8 h-8 text-neutral-500 mx-auto mb-4" strokeWidth={1.5} />
-            <h3 className="text-lg font-semibold mb-2">Supabase Not Connected</h3>
-            <p className="text-sm text-neutral-500 max-w-md mx-auto mb-4">
-              Set <code className="text-neutral-300 bg-neutral-800 px-1.5 py-0.5 rounded text-xs">VITE_SUPABASE_URL</code> and{' '}
-              <code className="text-neutral-300 bg-neutral-800 px-1.5 py-0.5 rounded text-xs">VITE_SUPABASE_ANON_KEY</code> in your{' '}
-              <code className="text-neutral-300 bg-neutral-800 px-1.5 py-0.5 rounded text-xs">.env.local</code> file,
-              then create a <code className="text-neutral-300 bg-neutral-800 px-1.5 py-0.5 rounded text-xs">funnel_events</code> table
-              with columns: <code className="text-neutral-300 bg-neutral-800 px-1.5 py-0.5 rounded text-xs">id</code>,{' '}
-              <code className="text-neutral-300 bg-neutral-800 px-1.5 py-0.5 rounded text-xs">event</code>,{' '}
-              <code className="text-neutral-300 bg-neutral-800 px-1.5 py-0.5 rounded text-xs">role_selected</code>,{' '}
-              <code className="text-neutral-300 bg-neutral-800 px-1.5 py-0.5 rounded text-xs">template_slug</code>,{' '}
-              <code className="text-neutral-300 bg-neutral-800 px-1.5 py-0.5 rounded text-xs">created_at</code>.
+          <div className="bg-white border border-stone-200 shadow-card rounded-xl px-6 py-8 mb-8 text-center">
+            <AlertTriangle className="w-8 h-8 text-brass-600 mx-auto mb-4" strokeWidth={1.75} />
+            <h3 className="text-lg font-semibold mb-2 text-stone-900">Supabase not connected</h3>
+            <p className="text-sm text-stone-600 max-w-md mx-auto mb-4 leading-relaxed">
+              Set <code className="text-stone-900 bg-cream-200 px-1.5 py-0.5 rounded text-xs font-mono">VITE_SUPABASE_URL</code> and{' '}
+              <code className="text-stone-900 bg-cream-200 px-1.5 py-0.5 rounded text-xs font-mono">VITE_SUPABASE_ANON_KEY</code> in your{' '}
+              <code className="text-stone-900 bg-cream-200 px-1.5 py-0.5 rounded text-xs font-mono">.env.local</code> file,
+              then create a <code className="text-stone-900 bg-cream-200 px-1.5 py-0.5 rounded text-xs font-mono">funnel_events</code> table.
             </p>
-            <p className="text-xs text-neutral-600">Restart the dev server after updating .env.local.</p>
+            <p className="text-xs text-stone-500">Restart the dev server after updating .env.local.</p>
           </div>
         )}
 
         {error && error !== 'not_configured' && (
-          <div className="text-red-400 bg-red-400/10 border border-red-400/20 rounded-xl px-5 py-4 mb-8">
+          <div className="text-red-700 bg-red-50 border border-red-200 rounded-xl px-5 py-4 mb-8">
             {error}
           </div>
         )}
@@ -158,20 +160,20 @@ export default function MetricsDashboard() {
                 return (
                   <div
                     key={stage.label}
-                    className="relative bg-neutral-900/50 border border-neutral-800 rounded-xl p-6"
+                    className="relative bg-white border border-stone-200 shadow-card hover:shadow-card-hover transition-shadow rounded-xl p-5 sm:p-6"
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-neutral-800 flex items-center justify-center">
-                        <Icon className="w-5 h-5 text-neutral-400" strokeWidth={1.5} />
+                      <div className="w-10 h-10 rounded-lg bg-brass-50 flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-brass-600" strokeWidth={1.75} />
                       </div>
                       {dropoff && (
-                        <span className="text-xs text-neutral-600">
+                        <span className="text-xs text-stone-500 font-medium">
                           {dropoff}% from prev
                         </span>
                       )}
                     </div>
-                    <p className="text-3xl font-bold tracking-tight mb-1">{stage.count}</p>
-                    <p className="text-sm text-neutral-500">{stage.label}</p>
+                    <p className="text-3xl font-bold tracking-tight mb-1 text-stone-900">{stage.count}</p>
+                    <p className="text-sm text-stone-600">{stage.label}</p>
                   </div>
                 );
               })}
@@ -179,38 +181,38 @@ export default function MetricsDashboard() {
 
             {/* Conversion & Viral Rate */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
-              <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-sm text-neutral-500">Signup Views</span>
-                  <ArrowRight className="w-4 h-4 text-neutral-700" />
-                  <span className="text-sm text-neutral-500">Templates Clicked</span>
+              <div className="bg-white border border-stone-200 shadow-card rounded-xl p-5 sm:p-6">
+                <div className="flex items-center gap-2 sm:gap-3 mb-4 flex-wrap">
+                  <span className="text-xs sm:text-sm text-stone-500">Signup views</span>
+                  <ArrowRight className="w-4 h-4 text-stone-400" />
+                  <span className="text-xs sm:text-sm text-stone-500">Templates clicked</span>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold tracking-tight">{conversionRate}%</span>
-                  <span className="text-sm text-neutral-500">conversion rate</span>
+                  <span className="text-3xl sm:text-4xl font-bold tracking-tight text-brass-600">{conversionRate}%</span>
+                  <span className="text-sm text-stone-500">conversion rate</span>
                 </div>
               </div>
 
-              <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-sm text-neutral-500">Templates Clicked</span>
-                  <ArrowRight className="w-4 h-4 text-neutral-700" />
-                  <span className="text-sm text-neutral-500">Team Invites Sent</span>
+              <div className="bg-white border border-stone-200 shadow-card rounded-xl p-5 sm:p-6">
+                <div className="flex items-center gap-2 sm:gap-3 mb-4 flex-wrap">
+                  <span className="text-xs sm:text-sm text-stone-500">Templates clicked</span>
+                  <ArrowRight className="w-4 h-4 text-stone-400" />
+                  <span className="text-xs sm:text-sm text-stone-500">Invites sent</span>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold tracking-tight">{viralRate}%</span>
-                  <span className="text-sm text-neutral-500">viral rate</span>
+                  <span className="text-3xl sm:text-4xl font-bold tracking-tight text-brass-600">{viralRate}%</span>
+                  <span className="text-sm text-stone-500">viral rate (K)</span>
                 </div>
               </div>
             </div>
 
             {/* Breakdown tables */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               {/* Roles breakdown */}
-              <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6">
-                <h3 className="text-base font-semibold mb-4">Roles Breakdown</h3>
+              <div className="bg-white border border-stone-200 shadow-card rounded-xl p-5 sm:p-6">
+                <h3 className="text-base font-semibold mb-4 text-stone-900">Roles breakdown</h3>
                 {Object.keys(roleCounts).length === 0 ? (
-                  <p className="text-sm text-neutral-600">No role events yet.</p>
+                  <p className="text-sm text-stone-500">No role events yet.</p>
                 ) : (
                   <div className="space-y-3">
                     {Object.entries(roleCounts)
@@ -220,13 +222,13 @@ export default function MetricsDashboard() {
                         const pct = max > 0 ? (count / max) * 100 : 0;
                         return (
                           <div key={role}>
-                            <div className="flex items-center justify-between text-sm mb-1">
-                              <span className="text-neutral-300 capitalize">{role}</span>
-                              <span className="text-neutral-500">{count}</span>
+                            <div className="flex items-center justify-between text-sm mb-1.5">
+                              <span className="text-stone-700 capitalize font-medium">{role}</span>
+                              <span className="text-stone-500">{count}</span>
                             </div>
-                            <div className="h-1.5 bg-neutral-800 rounded-full overflow-hidden">
+                            <div className="h-1.5 bg-stone-100 rounded-full overflow-hidden">
                               <div
-                                className="h-full bg-white/80 rounded-full transition-all duration-500"
+                                className="h-full bg-brass-500 rounded-full transition-all duration-500"
                                 style={{ width: `${pct}%` }}
                               />
                             </div>
@@ -238,10 +240,10 @@ export default function MetricsDashboard() {
               </div>
 
               {/* Templates breakdown */}
-              <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6">
-                <h3 className="text-base font-semibold mb-4">Templates Breakdown</h3>
+              <div className="bg-white border border-stone-200 shadow-card rounded-xl p-5 sm:p-6">
+                <h3 className="text-base font-semibold mb-4 text-stone-900">Templates breakdown</h3>
                 {Object.keys(templateCounts).length === 0 ? (
-                  <p className="text-sm text-neutral-600">No template events yet.</p>
+                  <p className="text-sm text-stone-500">No template events yet.</p>
                 ) : (
                   <div className="space-y-3">
                     {Object.entries(templateCounts)
@@ -251,13 +253,13 @@ export default function MetricsDashboard() {
                         const pct = max > 0 ? (count / max) * 100 : 0;
                         return (
                           <div key={slug}>
-                            <div className="flex items-center justify-between text-sm mb-1">
-                              <span className="text-neutral-300">{slug}</span>
-                              <span className="text-neutral-500">{count}</span>
+                            <div className="flex items-center justify-between text-sm mb-1.5">
+                              <span className="text-stone-700 font-medium truncate mr-2">{slug}</span>
+                              <span className="text-stone-500 flex-shrink-0">{count}</span>
                             </div>
-                            <div className="h-1.5 bg-neutral-800 rounded-full overflow-hidden">
+                            <div className="h-1.5 bg-stone-100 rounded-full overflow-hidden">
                               <div
-                                className="h-full bg-white/80 rounded-full transition-all duration-500"
+                                className="h-full bg-brass-500 rounded-full transition-all duration-500"
                                 style={{ width: `${pct}%` }}
                               />
                             </div>
@@ -270,7 +272,7 @@ export default function MetricsDashboard() {
             </div>
 
             {/* Total events */}
-            <p className="text-xs text-neutral-600 mt-8 text-center">
+            <p className="text-xs text-stone-500 mt-8 text-center">
               {events.length} total events tracked
             </p>
           </>

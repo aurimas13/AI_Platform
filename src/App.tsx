@@ -72,20 +72,26 @@ export default function App() {
 
   if (showBlankChat) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
-        <div className="text-center animate-fade-in">
-          <div className="w-16 h-16 rounded-2xl bg-neutral-800 border border-neutral-700 flex items-center justify-center mx-auto mb-6">
-            <MessageSquare className="w-8 h-8 text-neutral-400" strokeWidth={1.5} />
+      <div className="min-h-screen bg-cream-100 text-stone-900 flex items-center justify-center px-6">
+        <div className="text-center animate-fade-in max-w-lg">
+          <div className="w-16 h-16 rounded-2xl bg-white border border-stone-200 shadow-card flex items-center justify-center mx-auto mb-6">
+            <MessageSquare className="w-8 h-8 text-stone-400" strokeWidth={1.5} />
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-            Blank Chat Interface
+            Blank chat interface
           </h1>
-          <p className="text-neutral-500 text-lg max-w-sm mx-auto mb-6">
-            Variant A (Control) — no guided onboarding.
+          <p className="text-stone-600 text-base sm:text-lg max-w-sm mx-auto mb-6">
+            Variant A (Control) &mdash; the unguided baseline. This is what most AI platforms ship today.
           </p>
-          <div className="w-full max-w-md mx-auto h-64 bg-neutral-900/50 border border-neutral-800 rounded-xl flex items-center justify-center">
-            <p className="text-neutral-600 text-sm">Chat interface placeholder</p>
+          <div className="w-full max-w-md mx-auto h-64 bg-white border border-stone-200 shadow-card rounded-xl flex items-center justify-center">
+            <p className="text-stone-400 text-sm">Empty chat &mdash; users churn here.</p>
           </div>
+          <button
+            onClick={() => { setShowBlankChat(false); setStep('email'); }}
+            className="mt-8 text-sm text-brass-600 hover:text-brass-700 font-medium transition-colors"
+          >
+            &larr; Try the guided experience (Variant B)
+          </button>
         </div>
       </div>
     );
@@ -93,26 +99,40 @@ export default function App() {
 
   if (done && !showModal) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
-        <div className="text-center animate-fade-in">
-          <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-6">
-            <Sparkles className="w-8 h-8 text-emerald-400" strokeWidth={1.5} />
+      <div className="min-h-screen bg-cream-100 text-stone-900 flex items-center justify-center px-6">
+        <div className="text-center animate-fade-in max-w-md">
+          <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-6">
+            <Sparkles className="w-8 h-8 text-emerald-600" strokeWidth={1.5} />
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-            You're all set
+            You&apos;re all set
           </h1>
-          <p className="text-neutral-400 text-lg max-w-sm mx-auto mb-8">
-            Your workspace is being configured. We'll send a confirmation to{' '}
-            <span className="text-white">{email}</span>.
+          <p className="text-stone-600 text-base sm:text-lg max-w-sm mx-auto mb-6">
+            Your workspace is being configured. We&apos;ll send a confirmation to{' '}
+            <span className="text-stone-900 font-medium">{email}</span>.
           </p>
           {invitedEmail && (
-            <p className="text-neutral-400 text-sm max-w-sm mx-auto mb-8">
-              Invite sent to <span className="text-white">{invitedEmail}</span>.
+            <p className="text-stone-600 text-sm max-w-sm mx-auto mb-6">
+              Invite sent to <span className="text-stone-900 font-medium">{invitedEmail}</span>.
             </p>
           )}
-          <div className="flex items-center justify-center gap-2 text-sm text-neutral-600">
+          <div className="flex items-center justify-center gap-2 text-sm text-stone-500 mb-8">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Provisioning agents...
+            Provisioning your agents…
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href="/case-study"
+              className="px-5 h-11 inline-flex items-center justify-center gap-2 bg-stone-900 text-cream-50 text-sm font-medium rounded-xl hover:bg-stone-800 transition-colors"
+            >
+              Read the case study &rarr;
+            </a>
+            <a
+              href="/metrics"
+              className="px-5 h-11 inline-flex items-center justify-center gap-2 bg-white text-stone-900 text-sm font-medium rounded-xl border border-stone-200 shadow-card hover:shadow-card-hover hover:border-stone-300 transition-all"
+            >
+              View live metrics
+            </a>
           </div>
         </div>
       </div>

@@ -11,8 +11,8 @@ export default function StepIndicator({ total, current }: StepIndicatorProps) {
           key={i}
           className={`h-1.5 rounded-full transition-all duration-500 ${
             i <= current
-              ? 'w-8 bg-white'
-              : 'w-4 bg-neutral-700'
+              ? 'w-6 sm:w-8 bg-brass-500'
+              : 'w-3 sm:w-4 bg-stone-300'
           }`}
         />
       ))}
