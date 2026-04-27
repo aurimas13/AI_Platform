@@ -4,7 +4,7 @@
 
 > A **Product-Led Growth** prototype that solves the **Cold-Start Problem** in AI platforms — replacing the blank chat interface with a role-based guided setup that drives activation, retention, and viral expansion.
 
-**[Live Prototype](https://gateway.aurimas.io)** &nbsp;|&nbsp; **[Case Study](https://gateway.aurimas.io/case-study)** &nbsp;|&nbsp; **[Metrics Dashboard](https://gateway.aurimas.io/metrics)** &nbsp;|&nbsp; **[Product Brief](https://github.com/aurimas13/AI_Platform/blob/main/AI%20Gateway.pdf)** &nbsp;|&nbsp; **[Growth Memo](https://github.com/aurimas13/AI_Platform/blob/main/Product%20Growth%20Memo.pdf)**
+**[Live Demo](https://gateway.aurimas.io)** &nbsp;|&nbsp; **[Workspace](https://gateway.aurimas.io/workspace)** &nbsp;|&nbsp; **[Agents](https://gateway.aurimas.io/agents)** &nbsp;|&nbsp; **[Pricing](https://gateway.aurimas.io/pricing)** &nbsp;|&nbsp; **[Case Study](https://gateway.aurimas.io/case-study)** &nbsp;|&nbsp; **[Metrics](https://gateway.aurimas.io/metrics)** &nbsp;|&nbsp; **[Changelog](https://gateway.aurimas.io/changelog)**
 
 ---
 
@@ -44,6 +44,23 @@ This project is a fully functional **proof-of-concept** demonstrating three core
   - **Variant A (Control):** Skips directly to a blank chat interface
 - All events (including `paywall_viewed` and `upgrade_intent_clicked`) are tracked in Supabase
 - **Why it matters:** Gives PMs and growth teams the data to prove guided onboarding outperforms blank-slate experiences
+
+### 4. Working Chat Workspace (`/workspace`)
+
+- **Streaming chat UI** with conversation history, agent picker, and per-agent suggestion prompts
+- **Hybrid AI backend:**
+  - **Real GPT-4o-mini** when `OPENAI_API_KEY` is set as a Vercel environment variable (server-side only — never exposed to the browser)
+  - **Deterministic mock** with realistic token streaming when no key is configured
+- Conversations persisted to `localStorage` (capped at 50)
+- Per-agent system prompts tuned for each of the 16 agents
+- **Why it matters:** Demonstrates the actual product surface, not just the marketing flow
+
+### 5. Agent Catalog (`/agents`), Pricing (`/pricing`), Settings (`/settings`), Changelog (`/changelog`)
+
+- **Agent Catalog** — searchable, filterable browse view of all 16 agents
+- **Pricing** — 4 tiers (Free / Pro / Team / Enterprise) with FAQ and trust signals
+- **Settings** — workspace name, team invites, API key docs, usage stats, danger zone
+- **Changelog** — versioned release notes signaling product velocity
 
 ---
 

@@ -7,7 +7,8 @@ import EmailSignup from './components/EmailSignup';
 import RoleSelector from './components/RoleSelector';
 import TemplateLibrary from './components/TemplateLibrary';
 import SuccessModal from './components/SuccessModal';
-import { Sparkles, MessageSquare } from 'lucide-react';
+import { Sparkles, MessageSquare, ArrowRight, BarChart3 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function App() {
   const [step, setStep] = useState<OnboardingStep>('email');
@@ -18,6 +19,7 @@ export default function App() {
   const [invitedEmail, setInvitedEmail] = useState('');
   const [variant, setVariant] = useState<ABVariant>('B');
   const [showBlankChat, setShowBlankChat] = useState(false);
+  const [firstAgent, setFirstAgent] = useState<string | null>(null);
 
   const handleEmailSubmit = async (submittedEmail: string, v: ABVariant) => {
     try {
@@ -62,6 +64,7 @@ export default function App() {
     } catch {
       // DB unavailable
     }
+    if (templates.length > 0) setFirstAgent(templates[0]);
     setDone(true);
     setShowModal(true);
   };
@@ -121,18 +124,28 @@ export default function App() {
             Provisioning your agents…
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a
-              href="/case-study"
-              className="px-5 h-11 inline-flex items-center justify-center gap-2 bg-stone-900 text-cream-50 text-sm font-medium rounded-xl hover:bg-stone-800 transition-colors"
+            <Link
+              to={firstAgent ? `/workspace?agent=${firstAgent}` : '/workspace'}
+              className="px-6 h-12 inline-flex items-center justify-center gap-2 bg-stone-900 text-cream-50 text-sm font-medium rounded-xl hover:bg-stone-800 transition-colors shadow-card hover:shadow-card-hover"
             >
-              Read the case study &rarr;
-            </a>
-            <a
-              href="/metrics"
-              className="px-5 h-11 inline-flex items-center justify-center gap-2 bg-white text-stone-900 text-sm font-medium rounded-xl border border-stone-200 shadow-card hover:shadow-card-hover hover:border-stone-300 transition-all"
+              Enter your workspace
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/metrics"
+              className="px-6 h-12 inline-flex items-center justify-center gap-2 bg-white text-stone-900 text-sm font-medium rounded-xl border border-stone-200 shadow-card hover:shadow-card-hover hover:border-stone-300 transition-all"
             >
+              <BarChart3 className="w-4 h-4" />
               View live metrics
-            </a>
+            </Link>
+          </div>
+          <div className="mt-4 text-xs text-stone-500">
+            <Link to="/case-study" className="text-brass-600 hover:text-brass-700 font-medium">
+              Read the case study
+            </Link>{' '}&middot;{' '}
+            <Link to="/agents" className="text-stone-600 hover:text-stone-900">
+              Browse all agents
+            </Link>
           </div>
         </div>
       </div>
