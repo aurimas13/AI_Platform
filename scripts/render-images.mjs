@@ -12,9 +12,12 @@ const ROOT = join(__dirname, '..');
 const PUBLIC = join(ROOT, 'public');
 
 const targets = [
-  // LinkedIn Featured section + general OG
+  // LinkedIn Featured (1.91:1)
   { svg: 'linkedin-featured.svg', png: 'linkedin-featured.png', w: 1200, h: 627, density: 300 },
   { svg: 'linkedin-featured.svg', png: 'linkedin-featured@2x.png', w: 2400, h: 1254, density: 600 },
+  // LinkedIn Featured (square 1:1)
+  { svg: 'linkedin-square.svg', png: 'linkedin-square.png', w: 1200, h: 1200, density: 300 },
+  { svg: 'linkedin-square.svg', png: 'linkedin-square@2x.png', w: 2400, h: 2400, density: 600 },
   // Original og-image (Twitter/Facebook/general)
   { svg: 'og-image.svg', png: 'og-image.png', w: 1200, h: 630, density: 300 },
 ];
