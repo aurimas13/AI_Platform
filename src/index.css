@@ -1,41 +1,331 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* =====================================================================
+   ATELIER GATEWAY — design tokens
+   A craftsman's workbench aesthetic. Editorial museum-catalogue meets
+   developer tool. Warm paper-cream surfaces, deep ink type, brass-leaf
+   accents. Hairline rules. Numbered sections like a printed publication.
+   ===================================================================== */
+
+:root {
+  /* Type stack */
+  --font-display: 'Fraunces', 'Iowan Old Style', 'Georgia', serif;
+  --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Atelier palette — paper / ink / brass */
+  --paper:        #F1E8CE;
+  --paper-light:  #F7EEDA;
+  --paper-edge:   #E5D9B6;
+  --paper-deep:   #D8C99E;
+
+  --ink:          #1C1714;
+  --ink-soft:     #3A3026;
+  --stone:        #6B5F4F;
+  --stone-light:  #8C8071;
+  --stone-mute:   #A89C88;
+
+  --rule:         #C7B786;          /* Hairline gold — the editorial dividers */
+  --rule-soft:    rgba(199, 183, 134, 0.45);
+
+  --brass:        #9C6A1F;          /* Primary brass — body links, eyebrows */
+  --brass-bright: #C8943B;          /* Hover/active brass */
+  --brass-deep:   #6B4612;          /* Pressed/dark brass */
+  --brass-tint:   #F5E6C7;
+  --brass-foil:   #E8CD8B;          /* Brass leaf highlight */
+
+  --vermilion:    #B8412A;          /* Sharp accent — rare emphasis only */
+  --ember:        #E37A52;          /* Soft ember for gradient stops */
+
+  /* Workspace dark theme reserves (used in /workspace later) */
+  --void:         #14110D;
+  --void-soft:    #1F1A14;
+  --void-elev:    #2A241B;
+  --bone:         #E8DFC9;
+  --bone-soft:    #B8AC92;
+}
+
+/* =====================================================================
+   Base reset + typography
+   ===================================================================== */
+
 @layer base {
   html {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01', 'ss02', 'cv11';      /* Geist alt forms */
+    background-color: var(--paper);
+    color: var(--ink);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #FAF6ED;
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    background-color: #FAF6ED;
-    color: #1C1917;
+    background-color: var(--paper);
+    color: var(--ink);
+    /* Layered atmospheric background — warm light from top-right + faint
+       letterpress dot grid woven in. This is the foundation everything
+       sits on. */
+    background-image:
+      radial-gradient(circle at 88% -10%, rgba(232, 205, 139, 0.55), transparent 55%),
+      radial-gradient(circle at 12% 105%, rgba(184, 65, 42, 0.06), transparent 50%),
+      radial-gradient(ellipse at 50% 50%, transparent 0, rgba(28, 23, 20, 0.025) 100%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><circle cx='1' cy='1' r='0.7' fill='%231C1714' fill-opacity='0.06'/></svg>");
+    background-attachment: fixed, fixed, fixed, fixed;
+    background-size: auto, auto, auto, 40px 40px;
+    min-height: 100vh;
   }
 
   ::selection {
-    background-color: rgba(180, 83, 9, 0.18);
-    color: #1C1917;
+    background-color: rgba(184, 65, 42, 0.22);
+    color: var(--ink);
+  }
+
+  /* Display headlines use Fraunces. Apply via .font-display utility. */
+  h1, h2, h3, h4, h5, h6 {
+    font-feature-settings: 'ss01', 'ss02';
+  }
+
+  /* Mono-tracked elements */
+  code, kbd, pre, samp {
+    font-family: var(--font-mono);
+  }
+
+  /* Smoother focus rings — brass instead of system blue */
+  :focus-visible {
+    outline: 2px solid var(--brass-bright);
+    outline-offset: 2px;
+    border-radius: 6px;
   }
 }
 
+/* =====================================================================
+   Component primitives
+   ===================================================================== */
+
+@layer components {
+  /* Editorial section marker: § 01 / § 02 / § 03  */
+  .silcrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brass);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .silcrow::before {
+    content: '§';
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--brass-bright);
+    letter-spacing: 0;
+  }
+
+  /* Eyebrow label — small uppercase mono kicker */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--brass);
+  }
+
+  /* Hairline gold rule — the editorial divider */
+  .rule-hairline {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    height: 0;
+    margin: 0;
+  }
+
+  /* Letterpress hover for surfaces */
+  .surface {
+    background-color: rgba(247, 238, 218, 0.7);
+    border: 1px solid var(--rule-soft);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Ink button — primary */
+  .btn-ink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 3rem;
+    padding: 0 1.5rem;
+    background-color: var(--ink);
+    color: var(--paper-light);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    border-radius: 0;                 /* sharp corners — editorial, not SaaS */
+    border: 1px solid var(--ink);
+    transition: all 180ms cubic-bezier(0.32, 0.72, 0, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-ink::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(232, 205, 139, 0.18) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 600ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .btn-ink:hover::after {
+    transform: translateX(100%);
+  }
+
+  .btn-ink:hover {
+    background-color: var(--brass-deep);
+    border-color: var(--brass-deep);
+  }
+
+  .btn-ink:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  /* Brass ghost button — secondary */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 3rem;
+    padding: 0 1.25rem;
+    background-color: transparent;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    transition: all 180ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--brass);
+    color: var(--brass-deep);
+    background-color: rgba(232, 205, 139, 0.18);
+  }
+
+  /* Editorial paper card — cream tinted, hairline framed */
+  .paper-card {
+    background-color: var(--paper-light);
+    border: 1px solid var(--rule-soft);
+    border-radius: 2px;
+    transition: border-color 240ms ease, transform 240ms ease;
+  }
+
+  .paper-card:hover {
+    border-color: var(--brass);
+  }
+}
+
+/* =====================================================================
+   Motion utilities
+   ===================================================================== */
+
 @layer utilities {
   .animate-fade-in {
-    animation: fadeIn 0.5s ease-out forwards;
+    animation: fadeIn 0.5s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  }
+
+  /* Staggered reveal — apply with --delay custom property */
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: revealUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  /* Word-by-word headline animation */
+  .reveal-word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.6em) scaleY(0.92);
+    transform-origin: bottom;
+    animation: revealWord 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .blink-caret {
+    animation: blink 1.1s steps(2, end) infinite;
+  }
+
+  /* Letterpress shadow utility — subtle paper-press */
+  .shadow-press {
+    box-shadow:
+      0 1px 0 0 rgba(28, 23, 20, 0.04),
+      0 2px 8px -2px rgba(28, 23, 20, 0.06);
+  }
+
+  .shadow-press-hover {
+    box-shadow:
+      0 1px 0 0 rgba(28, 23, 20, 0.06),
+      0 6px 18px -3px rgba(28, 23, 20, 0.10),
+      0 2px 4px -1px rgba(28, 23, 20, 0.05);
+  }
+
+  /* Drop cap — first letter of editorial paragraphs */
+  .drop-cap::first-letter {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 4.4em;
+    line-height: 0.9;
+    float: left;
+    margin: 0.08em 0.12em -0.05em 0;
+    color: var(--brass);
+    font-feature-settings: 'ss01';
+  }
+
+  /* Marginalia — small annotations next to body copy */
+  .marginalia {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.6;
+    color: var(--stone);
+    letter-spacing: 0.01em;
   }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(14px); filter: blur(2px); }
+  to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes revealWord {
+  from { opacity: 0; transform: translateY(0.6em) scaleY(0.92); }
+  to   { opacity: 1; transform: translateY(0) scaleY(1); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

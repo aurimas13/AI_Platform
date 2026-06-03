@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import PaywallModal from './PaywallModal';
 import {
   Search,
@@ -19,9 +20,9 @@ import {
   Heart,
   ArrowLeft,
   ArrowRight,
-  Check,
   Loader2,
   Sparkles,
+  Lock,
 } from 'lucide-react';
 import type { Role, Template } from '../types/onboarding';
 import { templatesByRole, roleOptions } from '../data/templates';
@@ -60,6 +61,11 @@ const PRO_TEMPLATES = new Set([
   'sentiment-analyzer',
 ]);
 
+const reveal = {
+  hidden: { opacity: 0, y: 14, filter: 'blur(2px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+};
+
 export default function TemplateLibrary({ role, onFinish, onSkip, onBack }: TemplateLibraryProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
@@ -71,11 +77,8 @@ export default function TemplateLibrary({ role, onFinish, onSkip, onBack }: Temp
   const toggle = (slug: string) => {
     setSelected((prev) => {
       const next = new Set(prev);
-      if (next.has(slug)) {
-        next.delete(slug);
-      } else {
-        next.add(slug);
-      }
+      if (next.has(slug)) next.delete(slug);
+      else next.add(slug);
       return next;
     });
   };
@@ -90,103 +93,192 @@ export default function TemplateLibrary({ role, onFinish, onSkip, onBack }: Temp
   };
 
   return (
-    <div>
-      <button
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={{ visible: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } } }}
+    >
+      {/* Back link */}
+      <motion.button
+        variants={reveal}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         onClick={onBack}
-        className="flex items-center gap-2 text-sm text-stone-600 hover:text-stone-900 bg-white border border-stone-200 shadow-card rounded-lg px-4 py-2 transition-all hover:shadow-card-hover hover:border-stone-300 mb-6 sm:mb-8 group"
+        className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-stone hover:text-ink transition-colors mb-10"
       >
-        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-        Back
-      </button>
+        <ArrowLeft className="w-3 h-3 transition-transform group-hover:-translate-x-0.5" />
+        Back to role
+      </motion.button>
 
-      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-3 text-stone-900">
-        Your agent library
-      </h2>
+      {/* Folio rule */}
+      <motion.div
+        variants={reveal}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="flex items-center gap-3 mb-7"
+      >
+        <span className="silcrow">§ 03 · the catalogue</span>
+        <span className="flex-1 h-px bg-rule/60" />
+        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-stone-mute">
+          {roleLabel}
+        </span>
+      </motion.div>
 
-      <p className="text-stone-600 text-base sm:text-lg mb-2 max-w-lg">
-        Curated for <span className="text-stone-900 font-semibold">{roleLabel}</span>. Select the agents you want to activate.
-      </p>
-      <p className="text-stone-500 text-sm mb-8 sm:mb-10">
-        {selected.size} of {templates.length} selected
-      </p>
+      {/* Headline */}
+      <motion.h2
+        variants={reveal}
+        transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+        className="font-display text-[2.4rem] sm:text-[3.2rem] md:text-[3.8rem] font-medium leading-[0.98] tracking-tight text-ink mb-5"
+        style={{ fontVariationSettings: '"SOFT" 50, "opsz" 100' }}
+      >
+        Compose your{' '}
+        <em className="italic font-normal text-brass" style={{ fontVariationSettings: '"SOFT" 100, "opsz" 100' }}>
+          library
+        </em>
+        .
+      </motion.h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8 sm:mb-10">
-        {templates.map((template: Template) => {
+      <motion.p
+        variants={reveal}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="font-sans text-base sm:text-lg text-stone leading-relaxed max-w-xl mb-3"
+      >
+        Curated for <span className="text-ink font-medium underline decoration-brass underline-offset-4 decoration-1">{roleLabel}</span>. Tap entries to compose your starting agents.
+      </motion.p>
+
+      <motion.p
+        variants={reveal}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="marginalia mb-10"
+      >
+        <span className="text-brass">{selected.size}</span>
+        <span className="text-stone"> of </span>
+        <span className="text-ink">{templates.length}</span>
+        <span className="text-stone"> entries selected</span>
+      </motion.p>
+
+      {/* Catalogue list — full-width hairline rows */}
+      <motion.ol
+        variants={reveal}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="border-t border-b border-rule mb-10"
+      >
+        {templates.map((template: Template, i) => {
           const Icon = iconMap[template.icon] ?? Sparkles;
           const isSelected = selected.has(template.slug);
           const isPro = PRO_TEMPLATES.has(template.slug);
+          const num = String(i + 1).padStart(2, '0');
 
           return (
-            <button
-              key={template.slug}
-              onClick={() => {
-                if (isPro) {
-                  setPaywallSlug(template.slug);
-                  return;
-                }
-                toggle(template.slug);
-                trackFunnelEvent({ event: 'template_clicked', template_slug: template.slug });
-              }}
-              className={`relative text-left p-5 sm:p-6 rounded-xl border transition-all duration-200 ${
-                isSelected
-                  ? 'bg-stone-900 text-cream-50 border-stone-900 shadow-card-lg'
-                  : 'bg-white border-stone-200 shadow-card hover:shadow-card-hover hover:border-brass-300 hover:-translate-y-0.5'
-              }`}
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300 ${
-                    isSelected ? 'bg-cream-50/10' : isPro ? 'bg-brass-100' : 'bg-brass-50'
-                  }`}
-                >
-                  <Icon
-                    className={`w-5 h-5 transition-colors duration-300 ${
-                      isSelected ? 'text-brass-300' : 'text-brass-600'
-                    }`}
-                    strokeWidth={1.75}
-                  />
-                </div>
-
-                {isPro ? (
-                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-brass-600 text-cream-50 rounded-md shadow-sm">
-                    Pro
-                  </span>
-                ) : (
-                  <div
-                    className={`w-5 h-5 rounded-md border-2 transition-all duration-300 flex items-center justify-center ${
-                      isSelected
-                        ? 'border-cream-50 bg-cream-50'
-                        : 'border-stone-300'
-                    }`}
-                  >
-                    {isSelected && <Check className="w-3 h-3 text-stone-900" />}
-                  </div>
-                )}
-              </div>
-
-              <h3 className="text-base font-semibold mb-1.5">{template.name}</h3>
-              <p
-                className={`text-sm leading-relaxed transition-colors duration-300 ${
-                  isSelected ? 'text-cream-50/70' : 'text-stone-600'
+            <li key={template.slug} className={i > 0 ? 'border-t border-rule/60' : ''}>
+              <button
+                onClick={() => {
+                  if (isPro) {
+                    setPaywallSlug(template.slug);
+                    return;
+                  }
+                  toggle(template.slug);
+                  trackFunnelEvent({ event: 'template_clicked', template_slug: template.slug });
+                }}
+                className={`relative w-full text-left grid grid-cols-[2.5rem_2.5rem_1fr_auto] sm:grid-cols-[3rem_3rem_1fr_auto] items-center gap-3 sm:gap-5 py-4 sm:py-5 px-2 sm:px-4 transition-colors duration-300 ${
+                  isSelected
+                    ? 'bg-brass-tint/40'
+                    : 'hover:bg-paper-light/60'
                 }`}
               >
-                {template.description}
-              </p>
-            </button>
+                {/* Index */}
+                <span
+                  className={`font-mono text-[11px] tabular-nums tracking-widest transition-colors ${
+                    isSelected ? 'text-brass-deep' : 'text-stone-mute'
+                  }`}
+                >
+                  {num}
+                </span>
+
+                {/* Icon */}
+                <span
+                  className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 transition-all duration-300 ${
+                    isSelected
+                      ? 'bg-ink text-brass-foil'
+                      : isPro
+                        ? 'bg-paper-light text-brass border border-brass/30'
+                        : 'bg-transparent text-stone border border-rule/60'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" strokeWidth={1.6} />
+                </span>
+
+                {/* Name + description */}
+                <div className="min-w-0">
+                  <div className="flex items-baseline gap-2 flex-wrap">
+                    <h3
+                      className="font-display text-lg sm:text-xl font-medium tracking-tight text-ink leading-tight"
+                      style={{ fontVariationSettings: '"SOFT" 30, "opsz" 22' }}
+                    >
+                      {template.name}
+                    </h3>
+                    {isPro && (
+                      <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-brass-deep bg-brass-tint border border-brass/40 px-1.5 py-0.5 inline-flex items-center gap-1">
+                        <Lock className="w-2.5 h-2.5" />
+                        Pro
+                      </span>
+                    )}
+                  </div>
+                  <p className="font-sans text-sm text-stone leading-relaxed mt-0.5">
+                    {template.description}
+                  </p>
+                </div>
+
+                {/* Right control — checkbox or pro arrow */}
+                <span aria-hidden className="flex items-center justify-end">
+                  {isPro ? (
+                    <ArrowRight className="w-4 h-4 text-brass" strokeWidth={1.5} />
+                  ) : (
+                    <span
+                      className={`flex items-center justify-center w-5 h-5 border transition-all ${
+                        isSelected
+                          ? 'border-brass bg-brass'
+                          : 'border-rule bg-transparent'
+                      }`}
+                    >
+                      {isSelected && (
+                        <svg viewBox="0 0 12 12" className="w-3 h-3 text-paper-light" aria-hidden>
+                          <path
+                            d="M2 6.5L5 9.5L10 3"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </span>
+                  )}
+                </span>
+
+                {isSelected && (
+                  <span aria-hidden className="absolute left-0 top-2 bottom-2 w-[2px] bg-brass-bright" />
+                )}
+              </button>
+            </li>
           );
         })}
-      </div>
+      </motion.ol>
 
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      {/* Footer actions */}
+      <motion.div
+        variants={reveal}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
+      >
         <button
           onClick={handleFinish}
           disabled={selected.size === 0 || loading}
-          className="flex items-center justify-center gap-2 px-8 h-12 bg-stone-900 text-cream-50 font-medium rounded-xl transition-all duration-200 hover:bg-stone-800 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-stone-900 shadow-card hover:shadow-card-hover"
+          className="btn-ink"
         >
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Setting up&hellip;
+              Composing&hellip;
             </>
           ) : (
             <>
@@ -195,21 +287,24 @@ export default function TemplateLibrary({ role, onFinish, onSkip, onBack }: Temp
             </>
           )}
         </button>
-
         <button
           onClick={onSkip}
           disabled={loading}
-          className="text-sm text-stone-600 hover:text-stone-900 font-medium transition-colors h-12 px-4"
+          className="font-mono text-[11px] uppercase tracking-[0.18em] text-stone hover:text-ink transition-colors h-12 px-2 sm:px-4"
         >
           Skip for now
         </button>
-      </div>
+        <p className="marginalia sm:ml-auto">
+          ¶ {selected.size} agent{selected.size === 1 ? '' : 's'} ready
+        </p>
+      </motion.div>
+
       {paywallSlug && (
         <PaywallModal
           templateSlug={paywallSlug}
           onClose={() => setPaywallSlug(null)}
         />
       )}
-    </div>
+    </motion.div>
   );
 }
