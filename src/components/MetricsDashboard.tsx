@@ -200,22 +200,40 @@ export default function MetricsDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-cream-100 text-stone-900 flex flex-col">
+    <div className="min-h-screen text-ink flex flex-col">
       <TopNav />
 
-      <main className="flex-1 px-4 sm:px-8 py-8 sm:py-12 max-w-6xl mx-auto w-full">
+      {/* Running header */}
+      <div className="border-b border-rule/60">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.22em] text-stone">
+          <span>AI Gateway · Funnel ledger</span>
+          <span className="hidden sm:inline">live instrumentation</span>
+          <span>vol. VI</span>
+        </div>
+      </div>
+
+      <main className="flex-1 px-4 sm:px-8 py-10 sm:py-14 max-w-6xl mx-auto w-full">
         {/* Hero */}
-        <div className="mb-6 sm:mb-8">
-          <div className="mb-3">
-            <span className="inline-block px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-brass-600 bg-brass-50 border border-brass-200 rounded-full">
-              Live funnel
-            </span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-2 text-stone-900">
-            Funnel metrics
+        <div className="mb-8 sm:mb-10">
+          <p className="silcrow mb-5">§ The funnel</p>
+          <h1
+            className="font-display text-[2.4rem] sm:text-[3.2rem] md:text-[3.8rem] font-medium leading-[0.98] tracking-[-0.025em] text-ink mb-4 max-w-3xl"
+            style={{ fontVariationSettings: '"SOFT" 60, "opsz" 90' }}
+          >
+            Live{' '}
+            <em
+              className="italic font-normal text-brass"
+              style={{ fontVariationSettings: '"SOFT" 100, "opsz" 90' }}
+            >
+              metrics
+            </em>
+            <span className="text-brass-bright">.</span>
           </h1>
-          <p className="text-stone-600 text-sm sm:text-base max-w-2xl">
-            Every interaction in this app is instrumented end-to-end. Events are stored locally in your browser and, when configured, mirrored to Supabase in real time.
+          <p
+            className="font-display italic text-base sm:text-lg text-stone leading-[1.55] max-w-2xl"
+            style={{ fontVariationSettings: '"SOFT" 100, "opsz" 22' }}
+          >
+            Every interaction in this app is instrumented end-to-end. Events are buffered locally and, when configured, mirrored to Supabase in real time.
           </p>
         </div>
 
@@ -244,7 +262,7 @@ export default function MetricsDashboard() {
           <button
             onClick={refresh}
             disabled={refreshing}
-            className="inline-flex items-center gap-1.5 h-9 px-3 bg-white border border-stone-200 shadow-card hover:shadow-card-hover hover:border-brass-300 rounded-lg text-sm font-medium text-stone-700 transition-all disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 h-9 px-3 bg-paper-light border border-rule hover:border-brass font-mono text-[11px] uppercase tracking-[0.18em] text-stone hover:text-ink transition-all disabled:opacity-60"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
             <span className="hidden sm:inline">Refresh</span>
@@ -252,7 +270,7 @@ export default function MetricsDashboard() {
           <button
             onClick={handleExport}
             disabled={events.length === 0}
-            className="inline-flex items-center gap-1.5 h-9 px-3 bg-white border border-stone-200 shadow-card hover:shadow-card-hover hover:border-brass-300 rounded-lg text-sm font-medium text-stone-700 transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 h-9 px-3 bg-paper-light border border-rule hover:border-brass font-mono text-[11px] uppercase tracking-[0.18em] text-stone hover:text-ink transition-all disabled:opacity-50"
           >
             <Download className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Export CSV</span>
@@ -305,14 +323,14 @@ export default function MetricsDashboard() {
                 <button
                   onClick={handleSeed}
                   disabled={seeding}
-                  className="inline-flex items-center gap-1.5 h-9 px-3 bg-white border border-stone-200 shadow-card hover:shadow-card-hover hover:border-brass-300 rounded-lg text-xs font-medium text-stone-700 transition-all disabled:opacity-60"
+                  className="inline-flex items-center gap-1.5 h-9 px-3 bg-paper-light border border-rule hover:border-brass font-mono text-[11px] uppercase tracking-[0.18em] text-stone hover:text-ink transition-all disabled:opacity-60"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-brass-600" />
                   Seed demo data
                 </button>
                 <button
                   onClick={handleClear}
-                  className="inline-flex items-center gap-1.5 h-9 px-3 bg-white border border-stone-200 shadow-card hover:shadow-card-hover hover:border-red-300 hover:text-red-700 rounded-lg text-xs font-medium text-stone-700 transition-all"
+                  className="inline-flex items-center gap-1.5 h-9 px-3 bg-paper-light border border-rule hover:border-vermilion hover:text-vermilion font-mono text-[11px] uppercase tracking-[0.18em] text-stone transition-all"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   Clear local events
@@ -338,15 +356,17 @@ function SegmentedControl({
   options: { value: string; label: string }[];
 }) {
   return (
-    <div className="inline-flex bg-white border border-stone-200 shadow-card rounded-lg p-0.5 overflow-x-auto">
-      {options.map((o) => (
+    <div className="inline-flex bg-paper-light border border-rule overflow-x-auto">
+      {options.map((o, i) => (
         <button
           key={o.value}
           onClick={() => onChange(o.value)}
-          className={`px-3 h-8 text-xs font-medium rounded-md whitespace-nowrap transition-colors ${
+          className={`px-3 h-9 font-mono text-[11px] uppercase tracking-[0.18em] whitespace-nowrap transition-colors ${
+            i > 0 ? 'border-l border-rule' : ''
+          } ${
             value === o.value
-              ? 'bg-stone-900 text-cream-50'
-              : 'text-stone-600 hover:text-stone-900'
+              ? 'bg-ink text-paper-light'
+              : 'text-stone hover:text-ink hover:bg-brass-tint/40'
           }`}
         >
           {o.label}
@@ -405,15 +425,15 @@ function DiagnosticsPanel({
   };
 
   return (
-    <div className="bg-white border border-stone-200 shadow-card rounded-xl mb-6 overflow-hidden">
+    <div className="bg-paper-light border border-rule mb-8 overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full flex items-center gap-3 p-4 hover:bg-cream-50/50 transition-colors text-left"
+        className="w-full flex items-center gap-3 p-4 hover:bg-paper transition-colors text-left"
       >
         <StatusIcon className={`w-4 h-4 ${statusColor} flex-shrink-0`} />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-stone-900">{statusLabel}</p>
-          <p className="text-xs text-stone-500 truncate">
+          <p className="font-display text-base font-medium text-ink" style={{ fontVariationSettings: '"SOFT" 30, "opsz" 18' }}>{statusLabel}</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-stone truncate mt-0.5">
             {localCount} local &middot; {remoteCount} remote events
             {diag.lastInsertAt && (
               <>
@@ -533,16 +553,16 @@ function DiagRow({
         ? 'text-amber-600'
         : 'text-stone-400';
   return (
-    <div className="flex items-start gap-3 bg-white border border-stone-200 rounded-lg p-3">
-      <div className="w-8 h-8 rounded-lg bg-cream-100 flex items-center justify-center flex-shrink-0">
-        <Icon className="w-4 h-4 text-stone-600" strokeWidth={1.75} />
+    <div className="flex items-start gap-3 bg-paper border border-rule p-3">
+      <div className="w-8 h-8 bg-paper-light border border-rule/60 flex items-center justify-center flex-shrink-0">
+        <Icon className="w-4 h-4 text-stone" strokeWidth={1.6} />
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5">
-          <p className="text-sm font-semibold text-stone-900">{label}</p>
+          <p className="font-display text-sm font-medium text-ink" style={{ fontVariationSettings: '"SOFT" 30, "opsz" 16' }}>{label}</p>
           <StatusBadge className={`w-3.5 h-3.5 ${color}`} />
         </div>
-        <p className="text-xs text-stone-600 mt-0.5 leading-relaxed break-words">
+        <p className="font-sans text-xs text-stone mt-0.5 leading-relaxed break-words">
           {detail}
         </p>
       </div>
@@ -552,36 +572,36 @@ function DiagRow({
 
 function EmptyState({ onSeed, seeding }: { onSeed: () => void; seeding: boolean }) {
   return (
-    <div className="bg-white border border-stone-200 shadow-card rounded-2xl p-8 sm:p-12 text-center">
-      <div className="w-14 h-14 rounded-2xl bg-brass-50 border border-brass-200 flex items-center justify-center mx-auto mb-5">
-        <Activity className="w-7 h-7 text-brass-600" strokeWidth={1.75} />
-      </div>
-      <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-2 text-stone-900">
-        No events tracked yet
-      </h2>
-      <p className="text-sm sm:text-base text-stone-600 max-w-md mx-auto mb-6">
-        Go through the onboarding flow on the home page — every click instruments an event. Or seed the dashboard with realistic demo data to see it in action.
-      </p>
-      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center items-center">
-        <button
-          onClick={onSeed}
-          disabled={seeding}
-          className="inline-flex items-center gap-2 px-5 h-11 bg-stone-900 text-cream-50 text-sm font-medium rounded-xl hover:bg-stone-800 transition-colors disabled:opacity-60"
+    <div className="bg-paper-light border border-rule p-10 sm:p-16 text-center relative">
+      <div className="absolute inset-3 border border-brass/20 pointer-events-none" />
+      <div className="relative">
+        <div className="w-14 h-14 bg-brass-tint border border-brass/40 flex items-center justify-center mx-auto mb-6">
+          <Activity className="w-7 h-7 text-brass-deep" strokeWidth={1.6} />
+        </div>
+        <p className="silcrow justify-center mb-4">§ Empty ledger</p>
+        <h2
+          className="font-display text-2xl sm:text-3xl font-medium tracking-tight mb-3 text-ink"
+          style={{ fontVariationSettings: '"SOFT" 50, "opsz" 30' }}
         >
-          {seeding ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <Sparkles className="w-4 h-4" />
-          )}
-          Seed 120 demo events
-        </button>
-        <a
-          href="/"
-          className="inline-flex items-center gap-2 px-5 h-11 bg-white border border-stone-200 shadow-card hover:shadow-card-hover hover:border-brass-300 rounded-xl text-sm font-medium text-stone-700 transition-all"
-        >
-          Try onboarding
-          <ArrowRight className="w-4 h-4" />
-        </a>
+          No entries yet.
+        </h2>
+        <p className="font-sans text-sm sm:text-base text-stone leading-relaxed max-w-md mx-auto mb-7">
+          Move through the onboarding flow — every interaction is instrumented. Or seed the ledger with realistic demo data to see it composed.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <button onClick={onSeed} disabled={seeding} className="btn-ink">
+            {seeding ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Sparkles className="w-4 h-4" />
+            )}
+            Seed 120 demo events
+          </button>
+          <a href="/" className="btn-ghost">
+            Try onboarding
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -632,7 +652,7 @@ function FunnelStages({ funnel }: { funnel: FunnelCounts }) {
         return (
           <div
             key={s.label}
-            className="bg-white border border-stone-200 shadow-card hover:shadow-card-hover transition-shadow rounded-xl p-4 sm:p-6"
+            className="bg-paper-light border border-rule shadow-press hover:shadow-press-hover transition-shadow p-4 sm:p-6"
           >
             <div className="flex items-center justify-between mb-3 sm:mb-4">
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-brass-50 flex items-center justify-center">
@@ -644,10 +664,13 @@ function FunnelStages({ funnel }: { funnel: FunnelCounts }) {
                 </span>
               )}
             </div>
-            <p className="text-2xl sm:text-3xl font-bold tracking-tight mb-0.5 text-stone-900">
+            <p
+              className="font-display text-3xl sm:text-4xl font-medium tracking-tight mb-1 text-ink tabular-nums leading-none"
+              style={{ fontVariationSettings: '"SOFT" 60, "opsz" 36' }}
+            >
               {s.count}
             </p>
-            <p className="text-xs sm:text-sm text-stone-600">{s.label}</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-stone">{s.label}</p>
           </div>
         );
       })}
@@ -694,7 +717,7 @@ function ConversionStrip({ funnel }: { funnel: FunnelCounts }) {
       {cards.map((c) => (
         <div
           key={c.label}
-          className="bg-white border border-stone-200 shadow-card rounded-xl p-4 sm:p-6"
+          className="bg-paper-light border border-rule shadow-press p-4 sm:p-6"
         >
           <div className="flex items-center gap-2 mb-3 flex-wrap text-xs sm:text-sm text-stone-500">
             <span>{c.from}</span>
@@ -702,10 +725,13 @@ function ConversionStrip({ funnel }: { funnel: FunnelCounts }) {
             <span>{c.to}</span>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl sm:text-4xl font-bold tracking-tight text-brass-600">
+            <span
+              className="font-display text-4xl sm:text-5xl font-medium tracking-tight text-brass tabular-nums leading-none"
+              style={{ fontVariationSettings: '"SOFT" 60, "opsz" 50' }}
+            >
               {c.pct}%
             </span>
-            <span className="text-xs sm:text-sm text-stone-500">{c.label}</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-stone">{c.label}</span>
           </div>
         </div>
       ))}
@@ -729,7 +755,7 @@ function ABCompareSection({ a, b }: { a: FunnelCounts; b: FunnelCounts }) {
   ];
 
   return (
-    <section className="bg-white border border-stone-200 shadow-card rounded-xl p-5 sm:p-6 mb-6 sm:mb-8">
+    <section className="bg-paper-light border border-rule shadow-press p-5 sm:p-6 mb-6 sm:mb-8">
       <div className="flex items-start justify-between gap-3 flex-wrap mb-5">
         <div>
           <h3 className="text-base sm:text-lg font-semibold text-stone-900 mb-0.5">
@@ -876,7 +902,7 @@ function TimeSeriesChart({
   ];
 
   return (
-    <section className="bg-white border border-stone-200 shadow-card rounded-xl p-5 sm:p-6 mb-6 sm:mb-8">
+    <section className="bg-paper-light border border-rule shadow-press p-5 sm:p-6 mb-6 sm:mb-8">
       <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
         <div>
           <h3 className="text-base sm:text-lg font-semibold text-stone-900 mb-0.5">
@@ -983,7 +1009,7 @@ function BreakdownCard({
   const max = Math.max(0, ...Object.values(counts));
   const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
   return (
-    <div className="bg-white border border-stone-200 shadow-card rounded-xl p-5 sm:p-6">
+    <div className="bg-paper-light border border-rule shadow-press p-5 sm:p-6">
       <h3 className="text-base font-semibold mb-4 text-stone-900">{title}</h3>
       {entries.length === 0 ? (
         <p className="text-sm text-stone-500">{emptyMsg}</p>

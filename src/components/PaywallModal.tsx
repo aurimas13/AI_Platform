@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { X, Crown, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { X, ArrowRight } from 'lucide-react';
 import { trackFunnelEvent } from '../lib/analytics';
 
 interface PaywallModalProps {
@@ -19,64 +20,121 @@ export default function PaywallModal({ templateSlug, onClose }: PaywallModalProp
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-stone-900/50 backdrop-blur-sm animate-fade-in"
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="relative w-full max-w-md bg-white border border-stone-200 shadow-card-lg rounded-2xl p-6 sm:p-8 animate-fade-in">
-        {/* Close button */}
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full max-w-md bg-paper-light border border-rule shadow-press-hover p-7 sm:p-9"
+      >
+        {/* Hairline brass frame */}
+        <div className="absolute inset-2 border border-brass/30 pointer-events-none" />
+
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute top-4 right-4 text-stone-400 hover:text-stone-900 transition-colors"
+          className="absolute top-4 right-4 text-stone hover:text-ink transition-colors z-10"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
-        {/* Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-brass-100 border border-brass-200 flex items-center justify-center mx-auto mb-5">
-            <Crown className="w-7 h-7 text-brass-600" strokeWidth={1.75} />
+        {/* Folio mark */}
+        <div className="text-center mb-7">
+          <p className="silcrow justify-center mb-5">§ Pro tier · Folio</p>
+
+          {/* Brass-foil seal */}
+          <div className="flex justify-center mb-6">
+            <svg viewBox="0 0 56 56" className="w-14 h-14" aria-hidden>
+              <defs>
+                <linearGradient id="seal" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor="#E8CD8B" />
+                  <stop offset="1" stopColor="#9C6A1F" />
+                </linearGradient>
+              </defs>
+              <polygon
+                points="28,4 50,16 50,40 28,52 6,40 6,16"
+                fill="url(#seal)"
+              />
+              <polygon
+                points="28,12 44,20 44,36 28,44 12,36 12,20"
+                fill="none"
+                stroke="#1C1714"
+                strokeOpacity="0.3"
+                strokeWidth="0.8"
+              />
+              <text
+                x="28"
+                y="32"
+                textAnchor="middle"
+                fontFamily="serif"
+                fontSize="14"
+                fontStyle="italic"
+                fontWeight="600"
+                fill="#1C1714"
+              >
+                ★
+              </text>
+            </svg>
           </div>
 
-          <h2 className="text-2xl font-bold tracking-tight mb-2 text-stone-900">
-            Unlock enterprise agents
-            <br />
-            <span className="text-brass-600">with AI Gateway Pro</span>
+          <h2
+            className="font-display text-3xl sm:text-4xl font-medium tracking-tight text-ink mb-3 leading-[1.0]"
+            style={{ fontVariationSettings: '"SOFT" 60, "opsz" 40' }}
+          >
+            A premium{' '}
+            <em
+              className="italic text-brass"
+              style={{ fontVariationSettings: '"SOFT" 100, "opsz" 40' }}
+            >
+              instrument
+            </em>
+            .
           </h2>
-          <p className="text-stone-600 text-sm max-w-xs mx-auto">
-            This agent is part of our Pro plan. Upgrade to access premium agents and advanced features.
+          <p className="font-sans text-sm text-stone leading-relaxed max-w-xs mx-auto">
+            This agent is reserved for Pro members. Upgrade to unlock the full library and advanced features.
           </p>
         </div>
 
-        {/* Features */}
-        <div className="space-y-2.5 mb-6 sm:mb-8 bg-cream-100 rounded-xl p-4 border border-stone-200">
-          {['Unlimited premium agents', 'Priority processing', 'Advanced analytics & SSO'].map((feature) => (
-            <div key={feature} className="flex items-center gap-3">
-              <Zap className="w-4 h-4 text-brass-600 flex-shrink-0" strokeWidth={1.75} />
-              <span className="text-sm text-stone-700 font-medium">{feature}</span>
+        {/* Features list — printed catalogue */}
+        <div className="border-t border-b border-rule mb-7">
+          {[
+            'Unlimited premium agents',
+            'Priority response queue',
+            'Advanced analytics & SSO',
+          ].map((feature, i) => (
+            <div
+              key={feature}
+              className={`flex items-baseline gap-3 px-2 py-3 ${i > 0 ? 'border-t border-rule/60' : ''}`}
+            >
+              <span className="font-mono text-[11px] tabular-nums tracking-widest text-brass-bright">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span className="font-sans text-sm text-ink">{feature}</span>
             </div>
           ))}
         </div>
 
-        {/* Upgrade button */}
         <button
           onClick={handleUpgrade}
-          className="w-full h-12 bg-brass-600 hover:bg-brass-700 text-cream-50 font-semibold rounded-xl transition-colors duration-200 shadow-card hover:shadow-card-hover"
+          className="btn-ink w-full"
         >
-          Upgrade now
+          Upgrade to Pro
+          <ArrowRight className="w-4 h-4" />
         </button>
 
         <button
           onClick={onClose}
-          className="w-full mt-3 text-xs text-stone-500 hover:text-stone-900 transition-colors py-2"
+          className="w-full mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-stone hover:text-ink transition-colors py-2"
         >
           Maybe later
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 }

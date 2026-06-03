@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Sparkles, X, Send, Loader2, Check, UserPlus } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { X, Send, Loader2, Check, UserPlus } from 'lucide-react';
 import { trackFunnelEvent } from '../lib/analytics';
 
 interface SuccessModalProps {
@@ -16,18 +17,15 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
   const handleSendInvite = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
     if (!inviteEmail.trim()) {
-      setError('Enter a teammate\'s email.');
+      setError("Enter a teammate's email.");
       return;
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inviteEmail)) {
       setError('Enter a valid email address.');
       return;
     }
-
     setSending(true);
     await trackFunnelEvent({
       event: 'team_invite_sent',
@@ -35,77 +33,105 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
     });
     setSending(false);
     setSent(true);
-
-    setTimeout(() => {
-      onClose(inviteEmail.trim().toLowerCase());
-    }, 1500);
+    setTimeout(() => onClose(inviteEmail.trim().toLowerCase()), 1500);
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-stone-900/50 backdrop-blur-sm animate-fade-in"
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
         onClick={() => onClose()}
       />
 
-      {/* Modal */}
-      <div className="relative w-full max-w-md bg-white border border-stone-200 shadow-card-lg rounded-2xl p-6 sm:p-8 animate-fade-in">
-        {/* Close button */}
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full max-w-md bg-paper-light border border-rule shadow-press-hover p-7 sm:p-9"
+      >
+        {/* Hairline brass frame */}
+        <div className="absolute inset-2 border border-brass/30 pointer-events-none" />
+
         <button
           onClick={() => onClose()}
           aria-label="Close"
-          className="absolute top-4 right-4 text-stone-400 hover:text-stone-900 transition-colors"
+          className="absolute top-4 right-4 text-stone hover:text-ink transition-colors z-10"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
-        {/* Success header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-5">
-            {sent ? (
-              <Check className="w-7 h-7 text-emerald-600" strokeWidth={1.75} />
-            ) : (
-              <Sparkles className="w-7 h-7 text-emerald-600" strokeWidth={1.75} />
-            )}
-          </div>
+        {/* Folio header */}
+        <div className="text-center mb-6">
+          <p className="silcrow justify-center mb-5">
+            § {sent ? 'Fin.' : 'The aha'}
+          </p>
 
-          <h2 className="text-2xl font-bold tracking-tight mb-2 text-stone-900">
-            {sent ? 'Invite sent' : 'You\u2019re all set'}
+          <h2
+            className="font-display text-3xl sm:text-4xl font-medium tracking-tight text-ink mb-3 leading-[1.0]"
+            style={{ fontVariationSettings: '"SOFT" 60, "opsz" 40' }}
+          >
+            {sent ? (
+              <>
+                Invite{' '}
+                <em className="italic text-brass" style={{ fontVariationSettings: '"SOFT" 100' }}>
+                  sent
+                </em>
+                .
+              </>
+            ) : (
+              <>
+                You&rsquo;re{' '}
+                <em className="italic text-brass" style={{ fontVariationSettings: '"SOFT" 100' }}>
+                  all set
+                </em>
+                .
+              </>
+            )}
           </h2>
-          <p className="text-stone-600 text-sm max-w-xs mx-auto">
-            {sent
-              ? 'Your teammate will receive an invitation shortly.'
-              : (
-                <>
-                  Your workspace is being configured. We&apos;ll send a confirmation to{' '}
-                  <span className="text-stone-900 font-medium">{email}</span>.
-                </>
-              )}
+          <p className="font-sans text-sm text-stone leading-relaxed max-w-xs mx-auto">
+            {sent ? (
+              'Your teammate will receive an invitation shortly.'
+            ) : (
+              <>
+                Confirmation sent to{' '}
+                <span className="text-ink font-medium underline decoration-brass underline-offset-4 decoration-1">
+                  {email}
+                </span>
+                .
+              </>
+            )}
           </p>
         </div>
 
-        {/* Provisioning indicator */}
         {!sent && (
-          <div className="flex items-center justify-center gap-2 text-xs text-stone-500 mb-6 sm:mb-8">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Provisioning your agents&hellip;
-          </div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-stone flex items-center justify-center gap-2 mb-7">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inset-0 rounded-full bg-brass-bright animate-ping opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brass-bright" />
+            </span>
+            Provisioning agents
+          </p>
         )}
 
-        {/* Invite section */}
         {!sent && (
-          <div className="border-t border-stone-200 pt-6">
-            <div className="flex items-center gap-2 mb-3">
-              <UserPlus className="w-4 h-4 text-brass-600" strokeWidth={1.75} />
-              <h3 className="text-sm font-semibold text-stone-900">Invite your team</h3>
+          <div className="border-t border-rule pt-6">
+            <div className="flex items-center gap-2 mb-2">
+              <UserPlus className="w-4 h-4 text-brass" strokeWidth={1.6} />
+              <h3
+                className="font-display text-lg font-medium text-ink"
+                style={{ fontVariationSettings: '"SOFT" 30, "opsz" 20' }}
+              >
+                Invite the team
+              </h3>
             </div>
-            <p className="text-xs text-stone-600 mb-4 leading-relaxed">
-              AI agents work better when your whole team is on board. Send an invite to get started together.
+            <p className="font-sans text-sm text-stone leading-relaxed mb-4">
+              An atelier works better with collaborators. Send an invitation to begin together.
             </p>
 
             <form onSubmit={handleSendInvite}>
-              <div className="relative group">
+              <div className="relative">
                 <input
                   type="email"
                   value={inviteEmail}
@@ -114,14 +140,14 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
                     if (error) setError('');
                   }}
                   placeholder="teammate@company.com"
-                  className="w-full h-12 bg-cream-50 border border-stone-200 rounded-xl px-4 pr-12 text-stone-900 placeholder-stone-400 text-sm outline-none transition-all duration-200 focus:border-brass-400 focus:ring-2 focus:ring-brass-200 focus:bg-white"
                   disabled={sending}
+                  className="w-full h-12 bg-paper border border-rule px-4 pr-12 font-sans text-sm text-ink placeholder-stone-mute outline-none focus:border-brass focus:ring-1 focus:ring-brass/30 transition-all rounded-none"
                 />
                 <button
                   type="submit"
                   disabled={sending}
                   aria-label="Send invite"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 bg-stone-900 text-cream-50 rounded-lg flex items-center justify-center transition-all duration-200 hover:bg-stone-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute right-1 top-1 h-10 w-10 bg-ink text-paper-light hover:bg-brass-deep flex items-center justify-center transition-colors disabled:opacity-50"
                 >
                   {sending ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -132,19 +158,29 @@ export default function SuccessModal({ email, onClose }: SuccessModalProps) {
               </div>
 
               {error && (
-                <p className="mt-2 text-xs text-red-600 animate-fade-in">{error}</p>
+                <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-vermilion">
+                  ⌐ {error}
+                </p>
               )}
             </form>
 
             <button
               onClick={() => onClose()}
-              className="w-full mt-4 text-xs text-stone-500 hover:text-stone-900 transition-colors py-2"
+              className="w-full mt-5 font-mono text-[10px] uppercase tracking-[0.22em] text-stone hover:text-ink transition-colors py-2"
             >
-              Skip &mdash; I&apos;ll invite later
+              Skip — invite later
             </button>
           </div>
         )}
-      </div>
+
+        {sent && (
+          <div className="flex items-center justify-center pt-2">
+            <span className="w-12 h-12 bg-brass-tint border border-brass flex items-center justify-center">
+              <Check className="w-6 h-6 text-brass-deep" strokeWidth={1.5} />
+            </span>
+          </div>
+        )}
+      </motion.div>
     </div>
   );
 }

@@ -3,15 +3,13 @@ import { useSearchParams, Link } from 'react-router-dom';
 import {
   Send,
   Plus,
-  MessageSquare,
   Trash2,
-  Sparkles,
   ChevronDown,
-  Zap,
   Copy,
   Check,
   PanelLeftClose,
   PanelLeftOpen,
+  Square,
 } from 'lucide-react';
 import TopNav from './TopNav';
 import {
@@ -34,15 +32,18 @@ function defaultAgent(): Template & { role: Role } {
   return allAgents[0];
 }
 
+/**
+ * Atelier night-mode workspace. Deep void background with subtle warm
+ * grain. Mono-typography heavy. Brass-foil accents. The chat reads like
+ * a craftsman's terminal — not a SaaS chat box.
+ */
 export default function ChatWorkspace() {
   const [searchParams] = useSearchParams();
   const initialAgentSlug = searchParams.get('agent');
   const initialAgent =
     allAgents.find((a) => a.slug === initialAgentSlug) ?? defaultAgent();
 
-  const [conversations, setConversations] = useState<Conversation[]>(() =>
-    loadConversations(),
-  );
+  const [conversations, setConversations] = useState<Conversation[]>(() => loadConversations());
   const [activeId, setActiveId] = useState<string | null>(null);
   const [agent, setAgent] = useState<Template & { role: Role }>(initialAgent);
   const [agentMenuOpen, setAgentMenuOpen] = useState(false);
@@ -57,7 +58,6 @@ export default function ChatWorkspace() {
 
   const active = conversations.find((c) => c.id === activeId) ?? null;
 
-  // Initialize first conversation on mount if none active.
   useEffect(() => {
     if (!activeId && conversations.length === 0) {
       const c = newConversation(agent.slug, agent.name);
@@ -70,7 +70,6 @@ export default function ChatWorkspace() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Auto-scroll to latest message.
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -104,7 +103,6 @@ export default function ChatWorkspace() {
   const switchAgent = (a: Template & { role: Role }) => {
     setAgent(a);
     setAgentMenuOpen(false);
-    // Start a fresh chat scoped to this agent.
     const c = newConversation(a.slug, a.name);
     persist([c, ...conversations]);
     setActiveId(c.id);
@@ -137,13 +135,10 @@ export default function ChatWorkspace() {
       messages: [...active.messages, userMsg, assistantMsg],
       updatedAt: Date.now(),
     };
-    let working = conversations.map((c) =>
-      c.id === active.id ? updatedConv : c,
-    );
+    let working = conversations.map((c) => (c.id === active.id ? updatedConv : c));
     persist(working);
     setInput('');
     setStreaming(true);
-
     abortRef.current = new AbortController();
 
     try {
@@ -151,7 +146,7 @@ export default function ChatWorkspace() {
       await streamChat({
         messages: updatedConv.messages
           .filter((m) => m.content || m.role === 'user')
-          .slice(0, -1) // drop the empty assistant placeholder
+          .slice(0, -1)
           .concat({ role: 'user', content: trimmed }),
         agent: agent.slug,
         signal: abortRef.current.signal,
@@ -180,9 +175,7 @@ export default function ChatWorkspace() {
           ? {
               ...c,
               messages: c.messages.map((m, i, arr) =>
-                i === arr.length - 1
-                  ? { ...m, content: `[error: ${msg}]` }
-                  : m,
+                i === arr.length - 1 ? { ...m, content: `[error: ${msg}]` } : m,
               ),
             }
           : c,
@@ -202,7 +195,13 @@ export default function ChatWorkspace() {
   const suggestions = getSuggestions(agent.slug);
 
   return (
-    <div className="min-h-screen bg-cream-100 text-stone-900 flex flex-col">
+    <div
+      className="min-h-screen flex flex-col text-bone"
+      style={{
+        background:
+          'radial-gradient(ellipse at top right, rgba(156, 106, 31, 0.10), transparent 55%), radial-gradient(ellipse at bottom left, rgba(184, 65, 42, 0.05), transparent 50%), #14110D',
+      }}
+    >
       <TopNav variant="workspace" />
 
       <div className="flex-1 flex overflow-hidden">
@@ -210,39 +209,53 @@ export default function ChatWorkspace() {
         <aside
           className={`${
             sidebarOpen ? 'w-72' : 'w-0'
-          } transition-all duration-200 border-r border-stone-200/60 bg-cream-50/50 flex-shrink-0 overflow-hidden hidden md:flex md:flex-col`}
+          } transition-all duration-300 border-r border-void-elev/80 bg-void-soft/60 backdrop-blur-sm flex-shrink-0 overflow-hidden hidden md:flex md:flex-col`}
         >
-          <div className="p-3 border-b border-stone-200/60">
+          {/* Sidebar header — folio mark */}
+          <div className="px-4 pt-4 pb-3 border-b border-void-elev/70">
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-brass-bright/80">
+                ¶ Conversations
+              </span>
+              <span className="font-mono text-[10px] tabular-nums text-bone-soft">
+                {String(conversations.length).padStart(2, '0')}
+              </span>
+            </div>
             <button
               onClick={startNewChat}
-              className="w-full flex items-center justify-center gap-2 h-10 bg-stone-900 text-cream-50 text-sm font-medium rounded-lg hover:bg-stone-800 transition-colors"
+              className="group w-full flex items-center justify-center gap-2 h-10 bg-bone text-void font-sans text-sm font-medium hover:bg-brass-foil transition-colors border border-bone"
             >
               <Plus className="w-4 h-4" />
-              New chat
+              New conversation
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 space-y-1">
+          <div className="flex-1 overflow-y-auto px-2 py-2">
             {conversations.length === 0 && (
-              <p className="text-xs text-stone-500 p-3 text-center">No chats yet.</p>
+              <p className="font-mono text-[11px] text-bone-soft p-3 text-center">No conversations yet.</p>
             )}
-            {conversations.map((c) => (
+            {conversations.map((c, i) => (
               <button
                 key={c.id}
                 onClick={() => setActiveId(c.id)}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm group transition-colors flex items-start gap-2 ${
+                className={`w-full text-left p-3 group transition-colors flex items-start gap-3 border-l-2 ${
                   activeId === c.id
-                    ? 'bg-white shadow-card border border-stone-200'
-                    : 'hover:bg-white/60 text-stone-700'
+                    ? 'border-brass-bright bg-brass-deep/15'
+                    : 'border-transparent hover:bg-void-elev/40'
                 }`}
               >
-                <MessageSquare
-                  className="w-3.5 h-3.5 text-brass-600 mt-0.5 flex-shrink-0"
-                  strokeWidth={1.75}
-                />
+                <span
+                  className={`font-mono text-[10px] tabular-nums tracking-widest mt-0.5 ${
+                    activeId === c.id ? 'text-brass-bright' : 'text-bone-soft/60'
+                  }`}
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium">{c.title}</p>
-                  <p className="truncate text-[11px] text-stone-500">
+                  <p className={`text-sm truncate ${activeId === c.id ? 'text-bone' : 'text-bone-soft'}`}>
+                    {c.title}
+                  </p>
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-bone-soft/60 truncate mt-0.5">
                     {c.agentName}
                   </p>
                 </div>
@@ -251,8 +264,9 @@ export default function ChatWorkspace() {
                     e.stopPropagation();
                     deleteChat(c.id);
                   }}
-                  className="opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-600 transition-opacity flex-shrink-0"
+                  role="button"
                   aria-label="Delete chat"
+                  className="opacity-0 group-hover:opacity-100 text-bone-soft/60 hover:text-vermilion transition-opacity flex-shrink-0"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </span>
@@ -260,73 +274,64 @@ export default function ChatWorkspace() {
             ))}
           </div>
 
-          <div className="p-3 border-t border-stone-200/60">
+          <div className="p-3 border-t border-void-elev/70">
             <Link
               to="/agents"
-              className="flex items-center justify-between text-xs text-stone-500 hover:text-stone-900 transition-colors px-2 py-1.5"
+              className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.18em] text-bone-soft hover:text-brass-bright transition-colors px-2 py-1.5"
             >
               <span>Browse all agents</span>
-              <Sparkles className="w-3.5 h-3.5 text-brass-600" />
+              <span className="text-brass-bright">→</span>
             </Link>
           </div>
         </aside>
 
-        {/* Main chat area */}
+        {/* Main */}
         <main className="flex-1 flex flex-col min-w-0">
           {/* Toolbar */}
-          <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3 border-b border-stone-200/60 bg-cream-100/80">
-            <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3 border-b border-void-elev/70 bg-void-soft/40 backdrop-blur-sm">
+            <div className="flex items-center gap-3 min-w-0">
               <button
                 onClick={() => setSidebarOpen((o) => !o)}
-                className="hidden md:flex w-8 h-8 items-center justify-center rounded-lg hover:bg-white transition-colors flex-shrink-0"
+                className="hidden md:flex w-8 h-8 items-center justify-center text-bone-soft hover:text-bone hover:bg-void-elev transition-colors flex-shrink-0"
                 aria-label="Toggle sidebar"
               >
-                {sidebarOpen ? (
-                  <PanelLeftClose className="w-4 h-4 text-stone-600" />
-                ) : (
-                  <PanelLeftOpen className="w-4 h-4 text-stone-600" />
-                )}
+                {sidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
               </button>
 
-              {/* Agent picker */}
+              {/* Agent picker — terminal command style */}
               <div className="relative min-w-0">
                 <button
                   onClick={() => setAgentMenuOpen((o) => !o)}
-                  className="flex items-center gap-2 px-3 h-9 bg-white border border-stone-200 shadow-card rounded-lg hover:border-brass-300 transition-colors"
+                  className="flex items-center gap-2 px-3 h-9 bg-void-soft border border-void-elev hover:border-brass-deep transition-colors group"
                 >
-                  <div className="w-5 h-5 rounded bg-brass-50 flex items-center justify-center flex-shrink-0">
-                    <Zap className="w-3 h-3 text-brass-600" strokeWidth={2} />
-                  </div>
-                  <span className="text-sm font-medium truncate max-w-[140px] sm:max-w-none">
+                  <span className="font-mono text-[11px] text-brass-bright">∴</span>
+                  <span className="font-mono text-xs text-bone-soft">agent:</span>
+                  <span className="font-sans text-sm font-medium text-bone truncate max-w-[140px] sm:max-w-none">
                     {agent.name}
                   </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-stone-400" />
+                  <ChevronDown className={`w-3.5 h-3.5 text-bone-soft transition-transform ${agentMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
                 {agentMenuOpen && (
                   <>
-                    <div
-                      className="fixed inset-0 z-10"
-                      onClick={() => setAgentMenuOpen(false)}
-                    />
-                    <div className="absolute left-0 top-full mt-2 w-72 bg-white border border-stone-200 shadow-card-lg rounded-xl p-2 z-20 max-h-96 overflow-y-auto">
+                    <div className="fixed inset-0 z-10" onClick={() => setAgentMenuOpen(false)} />
+                    <div className="absolute left-0 top-full mt-2 w-80 bg-void-soft border border-void-elev shadow-press-hover p-2 z-20 max-h-96 overflow-y-auto">
                       {(Object.keys(templatesByRole) as Role[]).map((roleKey) => {
-                        const roleLabel =
-                          roleOptions.find((r) => r.id === roleKey)?.label ?? roleKey;
+                        const roleLabel = roleOptions.find((r) => r.id === roleKey)?.label ?? roleKey;
                         return (
-                          <div key={roleKey}>
-                            <p className="text-[10px] font-semibold uppercase tracking-widest text-stone-400 px-2 pt-2 pb-1">
+                          <div key={roleKey} className="mb-2">
+                            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-brass-bright px-2 pt-2 pb-1.5 flex items-center gap-2">
+                              <span className="text-brass-deep">§</span>
                               {roleLabel}
+                              <span className="flex-1 h-px bg-void-elev/80" />
                             </p>
                             {templatesByRole[roleKey].map((t) => (
                               <button
                                 key={t.slug}
-                                onClick={() =>
-                                  switchAgent({ ...t, role: roleKey })
-                                }
-                                className={`w-full text-left px-2 py-1.5 rounded-md text-sm transition-colors ${
+                                onClick={() => switchAgent({ ...t, role: roleKey })}
+                                className={`w-full text-left px-2 py-1.5 text-sm transition-colors ${
                                   agent.slug === t.slug
-                                    ? 'bg-stone-900 text-cream-50'
-                                    : 'hover:bg-cream-100 text-stone-700'
+                                    ? 'bg-brass-deep text-bone'
+                                    : 'text-bone-soft hover:bg-void-elev hover:text-bone'
                                 }`}
                               >
                                 {t.name}
@@ -341,45 +346,56 @@ export default function ChatWorkspace() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-[11px] text-stone-500">
+            <div className="flex items-center gap-2">
               {provider === 'openai' && (
-                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full font-medium">
-                  Live OpenAI
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] px-2 py-1 bg-emerald-950/60 text-emerald-300 border border-emerald-800/60 inline-flex items-center gap-1.5">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-75" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  </span>
+                  Live · OpenAI
                 </span>
               )}
               {provider === 'mock' && (
-                <span className="px-2 py-0.5 bg-brass-50 text-brass-700 border border-brass-200 rounded-full font-medium">
-                  Demo mode
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] px-2 py-1 bg-brass-deep/40 text-brass-foil border border-brass-deep/60">
+                  ⌐ Demo mode
                 </span>
               )}
             </div>
           </div>
 
           {/* Messages */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 sm:px-8 py-8">
             <div className="max-w-3xl mx-auto">
               {(!active || active.messages.length === 0) && (
-                <div className="text-center py-10 sm:py-20">
-                  <div className="w-14 h-14 rounded-2xl bg-brass-50 border border-brass-200 flex items-center justify-center mx-auto mb-5">
-                    <Sparkles
-                      className="w-7 h-7 text-brass-600"
-                      strokeWidth={1.75}
-                    />
-                  </div>
-                  <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2 text-stone-900">
+                <div className="text-center py-12 sm:py-20">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-brass-bright mb-7 inline-flex items-center gap-2">
+                    <span className="text-brass-deep">§</span> The workbench
+                    <span className="block w-12 h-px bg-brass-deep/60" />
+                  </p>
+                  <h2
+                    className="font-display text-4xl sm:text-5xl font-medium tracking-tight text-bone mb-4"
+                    style={{ fontVariationSettings: '"SOFT" 50, "opsz" 60' }}
+                  >
                     {agent.name}
                   </h2>
-                  <p className="text-stone-600 max-w-md mx-auto mb-8 text-sm sm:text-base">
+                  <p className="font-sans text-bone-soft max-w-md mx-auto mb-10 text-base leading-relaxed">
                     {agent.description}
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-xl mx-auto">
-                    {suggestions.map((s) => (
+                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-bone-soft/60 mb-4">
+                    ◇ Try a starting query
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-void-elev/60 border border-void-elev max-w-2xl mx-auto">
+                    {suggestions.map((s, i) => (
                       <button
                         key={s}
                         onClick={() => setInput(s)}
-                        className="text-left px-4 py-3 bg-white border border-stone-200 shadow-card hover:shadow-card-hover hover:border-brass-300 rounded-xl text-sm text-stone-700 transition-all"
+                        className="text-left px-4 py-4 bg-void-soft hover:bg-void-elev hover:text-bone text-bone-soft text-sm transition-colors flex items-start gap-3"
                       >
-                        {s}
+                        <span className="font-mono text-[10px] tabular-nums tracking-widest text-brass-bright/80 mt-0.5 flex-shrink-0">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span>{s}</span>
                       </button>
                     ))}
                   </div>
@@ -395,19 +411,24 @@ export default function ChatWorkspace() {
                   copied={copiedId === `${active.id}_${i}`}
                   onCopy={() => copyMessage(`${active.id}_${i}`, m.content)}
                   isStreaming={
-                    streaming &&
-                    i === active.messages.length - 1 &&
-                    m.role === 'assistant'
+                    streaming && i === active.messages.length - 1 && m.role === 'assistant'
                   }
                 />
               ))}
             </div>
           </div>
 
-          {/* Composer */}
-          <div className="border-t border-stone-200/60 bg-cream-100/80 px-4 sm:px-6 py-3 sm:py-4">
+          {/* Composer — command-line vibe */}
+          <div className="border-t border-void-elev/70 bg-void-soft/50 backdrop-blur-sm px-4 sm:px-8 py-4">
             <form onSubmit={handleSend} className="max-w-3xl mx-auto">
-              <div className="relative bg-white border border-stone-200 shadow-card rounded-2xl focus-within:border-brass-400 focus-within:ring-2 focus-within:ring-brass-200 transition-all">
+              <div className="relative bg-void-soft border border-void-elev focus-within:border-brass-bright transition-colors">
+                {/* Prompt mark */}
+                <span
+                  aria-hidden
+                  className="absolute left-3 top-3 font-mono text-sm text-brass-bright pointer-events-none select-none"
+                >
+                  →
+                </span>
                 <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -417,37 +438,36 @@ export default function ChatWorkspace() {
                       handleSend();
                     }
                   }}
-                  placeholder={`Ask ${agent.name} anything\u2026`}
+                  placeholder={`Ask ${agent.name}\u2026`}
                   rows={1}
-                  className="w-full bg-transparent px-4 py-3 pr-14 text-sm text-stone-900 placeholder-stone-400 outline-none resize-none max-h-40"
-                  style={{ minHeight: '44px' }}
                   disabled={streaming}
+                  className="w-full bg-transparent pl-10 pr-14 py-3 font-sans text-sm text-bone placeholder-bone-soft/60 outline-none resize-none max-h-40 caret-brass-bright"
+                  style={{ minHeight: '44px' }}
                 />
                 <button
                   type={streaming ? 'button' : 'submit'}
                   onClick={streaming ? stopStreaming : undefined}
                   disabled={!streaming && !input.trim()}
-                  className={`absolute right-2 bottom-2 w-9 h-9 rounded-lg flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed ${
+                  className={`absolute right-2 bottom-2 w-9 h-9 flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed ${
                     streaming
-                      ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200'
-                      : 'bg-stone-900 text-cream-50 hover:bg-stone-800'
+                      ? 'bg-vermilion/20 text-vermilion border border-vermilion/40 hover:bg-vermilion/30'
+                      : 'bg-bone text-void hover:bg-brass-foil border border-bone'
                   }`}
                   aria-label={streaming ? 'Stop' : 'Send'}
                 >
-                  {streaming ? (
-                    <span className="w-3 h-3 bg-red-600 rounded-sm" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
+                  {streaming ? <Square className="w-3 h-3" fill="currentColor" /> : <Send className="w-4 h-4" />}
                 </button>
               </div>
-              <p className="text-[11px] text-stone-500 mt-2 text-center">
-                Press <kbd className="px-1 py-0.5 bg-white border border-stone-200 rounded">Enter</kbd> to send,{' '}
-                <kbd className="px-1 py-0.5 bg-white border border-stone-200 rounded">Shift+Enter</kbd> for newline.
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-bone-soft/60 mt-2.5 text-center">
+                <kbd className="px-1.5 py-0.5 bg-void-elev border border-void-elev text-bone-soft mx-0.5">Enter</kbd>
+                send
+                <span className="mx-2 text-rule/30">·</span>
+                <kbd className="px-1.5 py-0.5 bg-void-elev border border-void-elev text-bone-soft mx-0.5">⇧⏎</kbd>
+                newline
                 {provider === 'mock' && (
                   <>
-                    {' \u00b7 '}Running in <strong>demo mode</strong>. Set{' '}
-                    <code className="text-brass-700">OPENAI_API_KEY</code> in Vercel for live responses.
+                    <span className="mx-2 text-rule/30">·</span>
+                    set <code className="font-mono text-brass-bright normal-case">OPENAI_API_KEY</code> for live
                   </>
                 )}
               </p>
@@ -458,6 +478,8 @@ export default function ChatWorkspace() {
     </div>
   );
 }
+
+/* ---------- subcomponents ---------- */
 
 function MessageBubble({
   message,
@@ -478,28 +500,29 @@ function MessageBubble({
   return (
     <div
       key={index}
-      className={`flex gap-3 sm:gap-4 mb-6 ${isUser ? 'justify-end' : 'justify-start'}`}
+      className={`flex gap-3 sm:gap-4 mb-7 ${isUser ? 'justify-end' : 'justify-start'}`}
     >
       {!isUser && (
-        <div className="w-8 h-8 rounded-lg bg-brass-50 border border-brass-200 flex items-center justify-center flex-shrink-0">
-          <Sparkles className="w-4 h-4 text-brass-600" strokeWidth={1.75} />
+        <div
+          className="w-8 h-8 flex items-center justify-center flex-shrink-0 mt-0.5"
+          style={{
+            background: 'linear-gradient(135deg, #E8CD8B 0%, #9C6A1F 100%)',
+          }}
+        >
+          <span className="font-mono text-[10px] font-semibold text-void">∴</span>
         </div>
       )}
-      <div
-        className={`group relative max-w-[85%] sm:max-w-[75%] ${
-          isUser ? 'order-1' : ''
-        }`}
-      >
+      <div className={`group relative max-w-[85%] sm:max-w-[78%] ${isUser ? 'order-1' : ''}`}>
         {!isUser && (
-          <p className="text-[11px] font-semibold text-stone-500 mb-1 uppercase tracking-wider">
+          <p className="font-mono text-[10px] font-semibold text-brass-bright uppercase tracking-[0.18em] mb-1.5">
             {agentName}
           </p>
         )}
         <div
-          className={`px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+          className={`px-4 py-3 font-sans text-[14.5px] leading-[1.65] whitespace-pre-wrap ${
             isUser
-              ? 'bg-stone-900 text-cream-50 rounded-tr-sm'
-              : 'bg-white border border-stone-200 shadow-card text-stone-800 rounded-tl-sm'
+              ? 'bg-bone text-void border border-brass-foil/30'
+              : 'bg-void-soft border-l-2 border-brass-bright text-bone'
           }`}
         >
           {message.content || (isStreaming && <BlinkingCursor />)}
@@ -508,7 +531,7 @@ function MessageBubble({
         {!isUser && message.content && (
           <button
             onClick={onCopy}
-            className="absolute -bottom-7 left-1 opacity-0 group-hover:opacity-100 transition-opacity text-[11px] text-stone-500 hover:text-stone-900 flex items-center gap-1"
+            className="absolute -bottom-6 left-1 opacity-0 group-hover:opacity-100 transition-opacity font-mono text-[10px] uppercase tracking-[0.18em] text-bone-soft/60 hover:text-bone flex items-center gap-1.5"
           >
             {copied ? (
               <>
@@ -523,7 +546,7 @@ function MessageBubble({
         )}
       </div>
       {isUser && (
-        <div className="w-8 h-8 rounded-lg bg-stone-900 text-cream-50 flex items-center justify-center flex-shrink-0 text-xs font-bold order-2">
+        <div className="w-8 h-8 bg-void-elev border border-brass-foil/30 flex items-center justify-center flex-shrink-0 font-mono text-[11px] font-semibold text-brass-foil order-2 mt-0.5">
           A
         </div>
       )}
@@ -534,8 +557,8 @@ function MessageBubble({
 function BlinkingCursor({ inline = false }: { inline?: boolean }) {
   return (
     <span
-      className={`inline-block w-1.5 h-4 bg-brass-600 animate-pulse ${
-        inline ? 'ml-0.5 align-text-bottom' : ''
+      className={`inline-block w-[7px] h-4 bg-brass-bright blink-caret ${
+        inline ? 'ml-1 align-text-bottom' : ''
       }`}
     />
   );

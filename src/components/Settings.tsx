@@ -1,15 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  User,
-  Users as UsersIcon,
-  Key,
-  BarChart3,
-  Trash2,
-  Check,
-  ExternalLink,
-  AlertTriangle,
-} from 'lucide-react';
+import { Trash2, Check, ExternalLink } from 'lucide-react';
 import TopNav from './TopNav';
 import { loadConversations, saveConversations } from '../lib/chat';
 
@@ -90,27 +81,42 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-cream-100 text-stone-900 flex flex-col">
+    <div className="min-h-screen text-ink flex flex-col">
       <TopNav />
 
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-16">
-        <div className="mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2 text-stone-900">
-            Settings
+      {/* Running header */}
+      <div className="border-b border-rule/60">
+        <div className="max-w-3xl mx-auto px-4 sm:px-8 py-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.22em] text-stone">
+          <span>AI Gateway · Settings</span>
+          <span className="hidden sm:inline">workspace ledger</span>
+          <span>vol. V</span>
+        </div>
+      </div>
+
+      <main className="flex-1 max-w-3xl mx-auto w-full px-4 sm:px-8 py-12 sm:py-16">
+        <div className="mb-12 sm:mb-16">
+          <p className="silcrow mb-5">§ Workspace ledger</p>
+          <h1
+            className="font-display text-[2.4rem] sm:text-[3.2rem] font-medium leading-[1.0] tracking-[-0.025em] text-ink mb-3"
+            style={{ fontVariationSettings: '"SOFT" 50, "opsz" 80' }}
+          >
+            Settings.
           </h1>
-          <p className="text-stone-600">Manage your workspace, team, and integrations.</p>
+          <p className="font-sans text-base text-stone max-w-xl">
+            Manage your workspace, team, and integrations.
+          </p>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-12 sm:space-y-16">
           {/* Workspace */}
-          <SettingsCard icon={User} title="Workspace">
-            <div className="space-y-4">
+          <Section num="01" eyebrow="Workspace" title="Identity">
+            <div className="space-y-px">
               <Field label="Workspace name">
                 <input
                   type="text"
                   value={workspace.name}
                   onChange={(e) => setWorkspace((w) => ({ ...w, name: e.target.value }))}
-                  className="w-full h-11 bg-cream-50 border border-stone-200 rounded-lg px-3 text-sm text-stone-900 outline-none focus:border-brass-400 focus:ring-2 focus:ring-brass-200 focus:bg-white transition-all"
+                  className="w-full h-11 bg-paper-light border border-rule px-3 font-sans text-sm text-ink outline-none focus:border-brass focus:ring-1 focus:ring-brass/30 transition-all rounded-none"
                 />
               </Field>
               <Field label="Your email">
@@ -118,26 +124,25 @@ export default function Settings() {
                   type="email"
                   value={workspace.email}
                   onChange={(e) => setWorkspace((w) => ({ ...w, email: e.target.value }))}
-                  className="w-full h-11 bg-cream-50 border border-stone-200 rounded-lg px-3 text-sm text-stone-900 outline-none focus:border-brass-400 focus:ring-2 focus:ring-brass-200 focus:bg-white transition-all"
+                  className="w-full h-11 bg-paper-light border border-rule px-3 font-sans text-sm text-ink outline-none focus:border-brass focus:ring-1 focus:ring-brass/30 transition-all rounded-none"
                 />
               </Field>
               <Field label="Your role">
                 <select
                   value={workspace.yourRole}
                   onChange={(e) => setWorkspace((w) => ({ ...w, yourRole: e.target.value }))}
-                  className="w-full h-11 bg-cream-50 border border-stone-200 rounded-lg px-3 text-sm text-stone-900 outline-none focus:border-brass-400 focus:ring-2 focus:ring-brass-200 focus:bg-white transition-all"
+                  className="w-full h-11 bg-paper-light border border-rule px-3 font-sans text-sm text-ink outline-none focus:border-brass focus:ring-1 focus:ring-brass/30 transition-all rounded-none"
                 >
-                  <option value="">Select a role&hellip;</option>
+                  <option value="">Select a role…</option>
                   <option value="marketing">Marketing</option>
                   <option value="developers">Engineering</option>
                   <option value="legal">Legal</option>
                   <option value="hr">HR</option>
                 </select>
               </Field>
-              <button
-                onClick={saveWorkspace}
-                className="inline-flex items-center gap-2 px-5 h-10 bg-stone-900 text-cream-50 text-sm font-medium rounded-lg hover:bg-stone-800 transition-colors"
-              >
+            </div>
+            <div className="mt-5">
+              <button onClick={saveWorkspace} className="btn-ink h-10">
                 {saved ? (
                   <>
                     <Check className="w-4 h-4" /> Saved
@@ -147,183 +152,206 @@ export default function Settings() {
                 )}
               </button>
             </div>
-          </SettingsCard>
+          </Section>
 
           {/* Team */}
-          <SettingsCard icon={UsersIcon} title="Team">
-            <form onSubmit={inviteMember} className="flex gap-2 mb-5">
+          <Section num="02" eyebrow="Team" title="Atelier members">
+            <form onSubmit={inviteMember} className="flex gap-px mb-6">
               <input
                 type="email"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
                 placeholder="teammate@company.com"
-                className="flex-1 h-11 bg-cream-50 border border-stone-200 rounded-lg px-3 text-sm text-stone-900 placeholder-stone-400 outline-none focus:border-brass-400 focus:ring-2 focus:ring-brass-200 focus:bg-white transition-all"
+                className="flex-1 h-11 bg-paper-light border border-rule px-3 font-sans text-sm text-ink placeholder-stone-mute outline-none focus:border-brass focus:ring-1 focus:ring-brass/30 transition-all rounded-none"
               />
-              <button
-                type="submit"
-                className="px-5 h-11 bg-stone-900 text-cream-50 text-sm font-medium rounded-lg hover:bg-stone-800 transition-colors"
-              >
+              <button type="submit" className="btn-ink h-11">
                 Send invite
               </button>
             </form>
             {team.length === 0 ? (
-              <p className="text-sm text-stone-500 text-center py-6 bg-cream-50 rounded-lg border border-stone-200">
-                No team members yet. Invite teammates to collaborate.
+              <p className="marginalia text-center py-6 border border-dashed border-rule">
+                No team members yet. Invite a colleague to begin.
               </p>
             ) : (
-              <div className="space-y-2">
-                {team.map((m) => (
-                  <div
+              <ul className="border-t border-b border-rule">
+                {team.map((m, i) => (
+                  <li
                     key={m.email}
-                    className="flex items-center justify-between gap-3 p-3 bg-cream-50 border border-stone-200 rounded-lg"
+                    className={`flex items-center justify-between gap-3 px-3 py-3 ${i > 0 ? 'border-t border-rule/60' : ''}`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-8 h-8 rounded-full bg-brass-100 flex items-center justify-center text-xs font-bold text-brass-700 flex-shrink-0">
+                      <span className="w-8 h-8 bg-paper-light border border-rule flex items-center justify-center font-mono text-[11px] font-semibold text-brass-deep flex-shrink-0">
                         {m.email.charAt(0).toUpperCase()}
-                      </div>
+                      </span>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-stone-900 truncate">{m.email}</p>
-                        <p className="text-xs text-stone-500 capitalize">
-                          {m.role} &middot;{' '}
-                          <span
-                            className={
-                              m.status === 'active' ? 'text-emerald-600' : 'text-amber-600'
-                            }
-                          >
-                            {m.status}
-                          </span>
+                        <p className="font-sans text-sm font-medium text-ink truncate">{m.email}</p>
+                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-stone-mute">
+                          {m.role} · <span className={m.status === 'active' ? 'text-emerald-700' : 'text-brass'}>{m.status}</span>
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={() => removeMember(m.email)}
-                      className="p-2 text-stone-400 hover:text-red-600 transition-colors"
+                      className="p-2 text-stone-mute hover:text-vermilion transition-colors"
                       aria-label="Remove member"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
-          </SettingsCard>
+          </Section>
 
-          {/* API Keys */}
-          <SettingsCard icon={Key} title="API keys & integrations">
-            <p className="text-sm text-stone-600 mb-4 leading-relaxed">
-              For real OpenAI responses, set <code className="text-brass-700 bg-brass-50 px-1.5 py-0.5 rounded text-xs font-mono">OPENAI_API_KEY</code> as a server-side environment variable in your Vercel project.{' '}
-              The key is never exposed to the browser.
+          {/* API */}
+          <Section num="03" eyebrow="API & integrations" title="Connect a key">
+            <p className="font-sans text-sm text-stone mb-4 leading-relaxed max-w-xl">
+              For real OpenAI responses, set{' '}
+              <code className="font-mono text-brass-deep bg-brass-tint px-1.5 py-0.5 text-xs">
+                OPENAI_API_KEY
+              </code>{' '}
+              as a server-side environment variable in your Vercel project. The key is never exposed to the browser.
             </p>
-            <div className="bg-cream-50 border border-stone-200 rounded-lg p-4 mb-4">
-              <p className="text-xs font-mono text-stone-700">
-                vercel env add OPENAI_API_KEY
-              </p>
-            </div>
+            <pre className="bg-ink text-paper-edge px-4 py-3 font-mono text-xs mb-4 overflow-x-auto">
+              <span className="text-brass-bright">$</span> vercel env add OPENAI_API_KEY
+            </pre>
             <a
               href="https://platform.openai.com/api-keys"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-brass-600 hover:text-brass-700 font-medium"
+              className="font-mono text-[11px] uppercase tracking-[0.18em] text-brass hover:text-brass-deep transition-colors inline-flex items-center gap-1.5"
             >
-              Get an OpenAI API key <ExternalLink className="w-3.5 h-3.5" />
+              Get an OpenAI API key <ExternalLink className="w-3 h-3" />
             </a>
-          </SettingsCard>
+          </Section>
 
           {/* Usage */}
-          <SettingsCard icon={BarChart3} title="Usage">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-4 bg-cream-50 border border-stone-200 rounded-lg">
-                <p className="text-2xl font-bold text-brass-600 mb-0.5">{convCount}</p>
-                <p className="text-xs text-stone-500">Saved conversations</p>
+          <Section num="04" eyebrow="Usage" title="Tally">
+            <div className="grid grid-cols-2 gap-px bg-rule">
+              <div className="p-5 bg-paper-light">
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-stone-mute mb-2">
+                  Saved conversations
+                </p>
+                <p
+                  className="font-display text-4xl font-medium text-brass tabular-nums leading-none"
+                  style={{ fontVariationSettings: '"SOFT" 60, "opsz" 40' }}
+                >
+                  {convCount}
+                </p>
               </div>
-              <div className="p-4 bg-cream-50 border border-stone-200 rounded-lg">
-                <p className="text-2xl font-bold text-brass-600 mb-0.5">Free</p>
-                <p className="text-xs text-stone-500">Current plan &middot;{' '}
-                  <Link to="/pricing" className="text-brass-600 hover:underline">Upgrade</Link>
+              <div className="p-5 bg-paper-light">
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-stone-mute mb-2">
+                  Current plan
+                </p>
+                <p
+                  className="font-display text-4xl font-medium text-brass leading-none"
+                  style={{ fontVariationSettings: '"SOFT" 60, "opsz" 40' }}
+                >
+                  Free
+                </p>
+                <p className="marginalia mt-2">
+                  <Link to="/pricing" className="text-brass hover:text-brass-deep underline decoration-brass-deep underline-offset-4">
+                    Upgrade →
+                  </Link>
                 </p>
               </div>
             </div>
-            <Link
-              to="/metrics"
-              className="mt-4 inline-flex items-center gap-1.5 text-sm text-brass-600 hover:text-brass-700 font-medium"
-            >
-              View funnel metrics dashboard <ExternalLink className="w-3.5 h-3.5" />
-            </Link>
-          </SettingsCard>
+            <div className="mt-5">
+              <Link
+                to="/metrics"
+                className="font-mono text-[11px] uppercase tracking-[0.18em] text-brass hover:text-brass-deep transition-colors inline-flex items-center gap-1.5"
+              >
+                View funnel metrics <ExternalLink className="w-3 h-3" />
+              </Link>
+            </div>
+          </Section>
 
-          {/* Danger zone */}
-          <SettingsCard icon={AlertTriangle} title="Danger zone" tone="danger">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          {/* Danger */}
+          <Section num="05" eyebrow="Danger zone" title="Erasure" tone="danger">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-5 border border-vermilion/30 bg-vermilion/5">
               <div>
-                <p className="font-semibold text-stone-900 text-sm">Clear conversation history</p>
-                <p className="text-xs text-stone-600 mt-0.5">
+                <p className="font-display text-lg font-medium text-ink"
+                   style={{ fontVariationSettings: '"SOFT" 30, "opsz" 20' }}>
+                  Clear conversation history
+                </p>
+                <p className="marginalia mt-0.5">
                   Deletes all locally-stored chats. Cannot be undone.
                 </p>
               </div>
               <button
                 onClick={clearAllChats}
-                className="inline-flex items-center justify-center gap-2 px-4 h-10 bg-red-50 text-red-700 text-sm font-medium rounded-lg border border-red-200 hover:bg-red-100 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-4 h-10 bg-vermilion/10 text-vermilion font-sans text-sm font-medium border border-vermilion/40 hover:bg-vermilion/20 transition-colors"
               >
                 <Trash2 className="w-4 h-4" /> Clear chats
               </button>
             </div>
-          </SettingsCard>
+          </Section>
         </div>
       </main>
 
-      <footer className="px-4 sm:px-10 py-8 text-center border-t border-stone-200/60">
-        <p className="text-xs text-stone-500">
-          &copy; 2026 AI Gateway &middot; <Link to="/case-study" className="text-brass-600 font-medium">Case Study</Link>
-        </p>
+      <footer className="border-t border-rule/60 mt-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-8 py-7 marginalia text-center">
+          © MMXXVI · AI Gateway ·{' '}
+          <Link to="/case-study" className="text-brass hover:text-brass-deep transition-colors">
+            Read the essay
+          </Link>
+        </div>
       </footer>
     </div>
   );
 }
 
-function SettingsCard({
-  icon: Icon,
+function Section({
+  num,
+  eyebrow,
   title,
   children,
   tone = 'default',
 }: {
-  icon: React.ElementType;
+  num: string;
+  eyebrow: string;
   title: string;
   children: React.ReactNode;
   tone?: 'default' | 'danger';
 }) {
   return (
-    <section
-      className={`bg-white border rounded-2xl shadow-card p-6 sm:p-7 ${
-        tone === 'danger' ? 'border-red-200' : 'border-stone-200'
-      }`}
-    >
-      <div className="flex items-center gap-3 mb-5">
-        <div
-          className={`w-9 h-9 rounded-lg flex items-center justify-center ${
-            tone === 'danger'
-              ? 'bg-red-50 border border-red-200'
-              : 'bg-brass-50 border border-brass-200'
-          }`}
-        >
-          <Icon
-            className={`w-4 h-4 ${tone === 'danger' ? 'text-red-600' : 'text-brass-600'}`}
-            strokeWidth={1.75}
-          />
+    <section className="grid sm:grid-cols-[6rem_1fr] gap-x-8 gap-y-3 pb-2">
+      <aside className="sm:pt-2">
+        <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-stone-mute mb-1">
+          §
         </div>
-        <h2 className="text-lg font-semibold text-stone-900">{title}</h2>
+        <div
+          className={`font-display text-3xl sm:text-4xl font-medium leading-none ${
+            tone === 'danger' ? 'text-vermilion' : 'text-brass'
+          }`}
+          style={{ fontVariationSettings: '"SOFT" 100, "opsz" 36' }}
+        >
+          {num}
+        </div>
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-brass mt-2">
+          {eyebrow}
+        </p>
+      </aside>
+      <div>
+        <h2
+          className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-ink mb-6 leading-tight"
+          style={{ fontVariationSettings: '"SOFT" 50, "opsz" 30' }}
+        >
+          {title}
+        </h2>
+        {children}
       </div>
-      {children}
     </section>
   );
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div>
-      <label className="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1.5">
+    <label className="block">
+      <span className="block font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-stone mb-1.5">
         {label}
-      </label>
+      </span>
       {children}
-    </div>
+    </label>
   );
 }
