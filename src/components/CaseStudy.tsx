@@ -9,11 +9,11 @@ import {
 import { Link } from 'react-router-dom';
 import TopNav from './TopNav';
 
-const outcomes = [
-  { metric: '3×', label: 'Faster Time-to-Value', detail: 'Role-based setup vs. blank chat interface' },
-  { metric: '+40%', label: 'Activation Rate Lift', detail: 'Guided flow vs. control (A/B tested)' },
-  { metric: 'K > 0', label: 'Viral Coefficient', detail: 'Team invites embedded at peak engagement' },
-  { metric: '6', label: 'Funnel Events Tracked', detail: 'Full instrumentation, signup → upgrade' },
+const scope = [
+  { metric: '16', label: 'AI agents shipped', detail: 'Across Marketing, Engineering, Legal & HR' },
+  { metric: '4', label: 'Roles supported', detail: 'Each with its own curated agent library' },
+  { metric: '6', label: 'Funnel events instrumented', detail: 'Signup → role → template → invite → paywall → upgrade' },
+  { metric: '2', label: 'Onboarding variants', detail: 'Guided (B) vs. blank-chat control (A)' },
 ];
 
 const sections = [
@@ -255,15 +255,18 @@ export default function CaseStudy() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="mb-16 sm:mb-24 -mx-4 sm:-mx-8 px-4 sm:px-8 py-12 sm:py-16 bg-paper-light/60 border-y border-rule"
         >
-          <p className="silcrow mb-8">§ 04 · Outcomes</p>
+          <p className="silcrow mb-8">§ 04 · The build</p>
           <h3
-            className="font-display text-[2rem] sm:text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink mb-10 max-w-2xl"
+            className="font-display text-[2rem] sm:text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink mb-4 max-w-2xl"
             style={{ fontVariationSettings: '"SOFT" 50, "opsz" 50' }}
           >
-            What the funnel said.
+            What was actually shipped.
           </h3>
+          <p className="font-sans text-base text-stone leading-relaxed max-w-2xl mb-10">
+            This is a working prototype, not a live product with traffic — so these are the things you can open and verify, not invented conversion numbers. The <Link to="/metrics" className="text-brass hover:text-brass-deep underline decoration-brass-deep underline-offset-4">metrics dashboard</Link> computes its funnel live from real interactions (or seeded demo data).
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-            {outcomes.map((o, i) => (
+            {scope.map((o, i) => (
               <div
                 key={o.label}
                 className={`pt-5 ${i % 2 === 0 ? 'border-t border-rule sm:border-r sm:pr-8' : 'border-t border-rule'} `}

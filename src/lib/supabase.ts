@@ -10,11 +10,10 @@ const noopResult = Promise.resolve({ data: null, error: null });
 const chainProxy: ProxyHandler<object> = {
   get: (_target, prop) => {
     if (prop === 'then') return undefined;
-    return (..._args: unknown[]) => new Proxy(noopResult, chainProxy);
+    return () => new Proxy(noopResult, chainProxy);
   },
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const supabase = (isConfigured
   ? createClient(supabaseUrl, supabaseAnonKey)
   : new Proxy({}, chainProxy)) as SupabaseClient;

@@ -171,6 +171,15 @@ export default function Pricing() {
           >
             Start free. Upgrade when you outgrow it. Cancel anytime — no contracts, no surprises.
           </motion.p>
+          <motion.p
+            variants={reveal}
+            transition={{ duration: 0.7 }}
+            className="marginalia mt-5 max-w-2xl"
+          >
+            ¶ Illustrative pricing for a portfolio prototype — tiers and limits show how the product
+            <em> would </em>
+            be packaged, not a live commercial offer.
+          </motion.p>
         </motion.section>
 
         {/* Tier list — printed price ledger, not card grid */}
@@ -213,7 +222,7 @@ export default function Pricing() {
                       </h3>
                       {t.highlight && (
                         <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-brass-deep bg-brass-foil border border-brass px-1.5 py-0.5">
-                          ★ Most chosen
+                          ★ Recommended
                         </span>
                       )}
                     </div>
@@ -280,12 +289,12 @@ export default function Pricing() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-16 sm:mb-20 -mx-4 sm:-mx-8 px-4 sm:px-8 py-10 bg-paper-light/60 border-y border-rule"
         >
-          <p className="silcrow mb-7 justify-center sm:justify-start">§ Trust marks</p>
+          <p className="silcrow mb-7 justify-center sm:justify-start">§ How it actually works</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
             {[
-              { metric: '99.9%', label: 'Uptime SLA', detail: 'on Team & Enterprise' },
-              { metric: 'SOC 2', label: 'Type II certified', detail: 'audited annually' },
-              { metric: '14 days', label: 'Free Team trial', detail: 'no card required' },
+              { metric: 'Open', label: 'Source on GitHub', detail: 'read every line' },
+              { metric: 'BYO key', label: 'Your OpenAI key', detail: 'read server-side only' },
+              { metric: '< 1 min', label: 'To your first agent', detail: 'no card required' },
             ].map((s, i) => (
               <div
                 key={s.label}

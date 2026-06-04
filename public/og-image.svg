@@ -58,20 +58,20 @@
     <!-- Chip 1 -->
     <g>
       <rect x="0" y="0" width="180" height="60" rx="12" fill="#FFFFFF" filter="url(#shadow)"/>
-      <text x="18" y="26" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#845B1E">3×</text>
-      <text x="18" y="48" font-family="Inter, sans-serif" font-size="12" font-weight="500" fill="#57534E">Faster Time-to-Value</text>
+      <text x="18" y="26" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#845B1E">16</text>
+      <text x="18" y="48" font-family="Inter, sans-serif" font-size="12" font-weight="500" fill="#57534E">AI Agents</text>
     </g>
     <!-- Chip 2 -->
     <g transform="translate(200, 0)">
       <rect x="0" y="0" width="180" height="60" rx="12" fill="#FFFFFF" filter="url(#shadow)"/>
-      <text x="18" y="26" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#845B1E">+40%</text>
-      <text x="18" y="48" font-family="Inter, sans-serif" font-size="12" font-weight="500" fill="#57534E">Activation Lift</text>
+      <text x="18" y="26" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#845B1E">4</text>
+      <text x="18" y="48" font-family="Inter, sans-serif" font-size="12" font-weight="500" fill="#57534E">Team Roles</text>
     </g>
     <!-- Chip 3 -->
     <g transform="translate(400, 0)">
       <rect x="0" y="0" width="180" height="60" rx="12" fill="#FFFFFF" filter="url(#shadow)"/>
-      <text x="18" y="26" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#845B1E">K &gt; 0</text>
-      <text x="18" y="48" font-family="Inter, sans-serif" font-size="12" font-weight="500" fill="#57534E">Viral Coefficient</text>
+      <text x="18" y="26" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#845B1E">6</text>
+      <text x="18" y="48" font-family="Inter, sans-serif" font-size="12" font-weight="500" fill="#57534E">Funnel Events</text>
     </g>
     <!-- Chip 4: Tech -->
     <g transform="translate(600, 0)">

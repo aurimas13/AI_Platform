@@ -18,6 +18,9 @@ const targets = [
   // LinkedIn Featured (square 1:1)
   { svg: 'linkedin-square.svg', png: 'linkedin-square.png', w: 1200, h: 1200, density: 300 },
   { svg: 'linkedin-square.svg', png: 'linkedin-square@2x.png', w: 2400, h: 2400, density: 600 },
+  // LinkedIn Featured — icon-style mark (square 1:1)
+  { svg: 'linkedin-featured-icon.svg', png: 'linkedin-featured-icon.png', w: 1200, h: 1200, density: 300 },
+  { svg: 'linkedin-featured-icon.svg', png: 'linkedin-featured-icon@2x.png', w: 2400, h: 2400, density: 600 },
   // Original og-image (Twitter/Facebook/general)
   { svg: 'og-image.svg', png: 'og-image.png', w: 1200, h: 630, density: 300 },
 ];

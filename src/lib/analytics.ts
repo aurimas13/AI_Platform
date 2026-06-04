@@ -169,7 +169,6 @@ export async function trackFunnelEvent(payload: FunnelPayload): Promise<void> {
       diag.lastInsertResult = 'error';
       diag.lastInsertError = error.message;
       // Surface in console so devs notice during local development.
-      // eslint-disable-next-line no-console
       console.warn('[analytics] Supabase insert failed:', error.message);
     } else {
       diag.lastInsertResult = 'ok';
@@ -178,7 +177,6 @@ export async function trackFunnelEvent(payload: FunnelPayload): Promise<void> {
   } catch (err) {
     diag.lastInsertResult = 'error';
     diag.lastInsertError = err instanceof Error ? err.message : 'Unknown error';
-    // eslint-disable-next-line no-console
     console.warn('[analytics] Supabase insert threw:', diag.lastInsertError);
   }
 
