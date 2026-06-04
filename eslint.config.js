@@ -24,5 +24,13 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
     },
+  },
+  {
+    // The app entry point isn't a fast-refresh boundary; it wires up routes
+    // (including lazy-loaded ones), so the react-refresh rule doesn't apply.
+    files: ['src/main.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
   }
 );

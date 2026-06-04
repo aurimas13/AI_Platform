@@ -9,7 +9,7 @@ export const roleOptions: RoleOption[] = [
   },
   {
     id: 'developers',
-    label: 'Developers',
+    label: 'Engineering',
     description: 'APIs, debugging, and automation',
     icon: 'Code2',
   },

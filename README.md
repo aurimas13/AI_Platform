@@ -22,7 +22,7 @@ This project is a fully functional **proof-of-concept** demonstrating three core
 
 ### 1. Role-Based Activation
 
-- Users select their role (**Marketing**, **Developers**, **Legal**, **HR**) immediately after signup
+- Users select their role (**Marketing**, **Engineering**, **Legal**, **HR**) immediately after signup
 - The app dynamically renders a **curated AI agent library** tailored to their function
 - **Premium "PRO" templates** with a paywall gate demonstrate monetization hooks
 - **Why it matters:** Personalization at signup reduces TtV from minutes to seconds
@@ -32,7 +32,7 @@ This project is a fully functional **proof-of-concept** demonstrating three core
 - A frictionless **"Invite your Team"** modal is embedded directly into the **"Aha!" moment** — right after workspace creation
 - Invite tracking is persisted to the database with the teammate's email
 - The flow is designed to feel natural, not forced — with a clear skip path
-- **Why it matters:** Embeds virality into the product experience itself, driving **K-Factor > 0**
+- **Why it matters:** Embeds virality into the product experience itself, so each activated user becomes a potential source of team expansion
 
 ### 3. Funnel Analytics & A/B Testing
 
